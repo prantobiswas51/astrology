@@ -21,7 +21,7 @@
     {{-- client design --}}
     @include('layouts.pub_nav')
 
-    <div class="max-w-7xl ">
+    <div class="max-w-7xl">
         {{ $slot }}
     </div>
 

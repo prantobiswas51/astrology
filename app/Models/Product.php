@@ -7,14 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'name', 'slug', 'description', 
-        'price', 'category_id', 'type', 
+        'name',
+        'slug',
+        'description',
+        'price',
+        'category_id',
+        'type',
         'status',
-        'short_description', 'custom_html', 
+        'short_description',
+        'custom_html',
         'sale_price',
+        'image1_path',
+        'image2_path',
+        'image3_path',
+        'image4_path',
         'fields',
-        'image1_path', 'image2_path', 'image3_path', 'image4_path',
     ];
+
+    protected $casts = [
+        'fields' => 'json',
+    ];
+
 
     public function category()
     {

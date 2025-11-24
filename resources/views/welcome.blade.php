@@ -83,7 +83,70 @@
                         Now</button>
                 </div>
             </div>
+
         </section>
+
+        {{-- Simple readings --}}
+
+        <section class="simple_readings ">
+            <h2 class="text-2xl font-bold text-center my-6">Simple Readings</h2>
+
+            {{-- Loop this --}}
+            <div
+                class="readings_grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 pb-6">
+
+                {{-- Reading Item --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+                    <div class="flex">
+                        <img src="" alt="Product Image"
+                            class="w-full h-40 mr-2 object-cover mb-4 bg-gray-200 rounded-lg">
+                        <div class="">
+                            <h3 class="text-xl font-semibold mb-2">Birth Chart Reading</h3>
+                            <p class="text-sky-600 drop-shadow text-md font-semibold mb-2">Get insights into your love
+                                life
+                                and relationships with this focused reading.</p>
+                            <h2 class="font-bold text-xl drop-shadow text-sky-800/50"><del>$35</del> <span
+                                    class="text-gray-800">$30</span> </h2>
+                        </div>
+                    </div>
+                    <a href="{{ route('product_view', ['slug' => 'birth-chart-reading']) }}">
+                        <button class="mt-auto bg-gray-900 font-extrabold py-2 px-4 
+                        rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Get Your Reading
+                            Now</button>
+                    </a>
+                </div>
+            </div>
+
+            {{-- Loop this --}}
+            <div
+                class="readings_grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 pb-6">
+
+                {{-- Reading Item --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+                    <div class="flex">
+                        <img src="" alt="Product Image"
+                            class="w-full h-40 mr-2 object-cover mb-4 bg-gray-200 rounded-lg">
+                        <div class="">
+                            <h3 class="text-xl font-semibold mb-2">Birth Chart Reading</h3>
+                            <p class="text-sky-600 drop-shadow text-md font-semibold mb-2">Get insights into your love
+                                life
+                                and relationships with this focused reading.</p>
+                            <h2 class="font-bold text-xl drop-shadow text-sky-800/50"><del>$35</del> <span
+                                    class="text-gray-800">$30</span> </h2>
+                        </div>
+                    </div>
+                    <a href="{{ route('product_view', ['slug' => 'birth-chart-reading']) }}">
+                        <button class="mt-auto bg-gray-900 font-extrabold py-2 px-4 
+                        rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Get Your Reading
+                            Now</button>
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
 
     </div>
 
