@@ -1,4 +1,12 @@
 <x-guest-layout>
+
+    <style>
+        .error-border {
+            border: 2px solid red !important;
+        }
+    </style>
+
+    </style>
     <div class="max-w-7xl mx-auto px-4 py-10">
 
         <!-- BUY NOW PAYMENT POPUP -->
@@ -229,6 +237,8 @@
                 action: actionType
             };
 
+            return data;            
+
         }
 
 
@@ -257,6 +267,46 @@
         });        
 
 
+        // VALIDATION FUNCTION — REQUIRED FIELDS MUST NOT BE EMPTY
+        
+
+        function validateBeforeSubmit() {
+            let valid = true;
+
+            // Validate quantity
+            let quantity = document.getElementById("qty_input").value;
+            if (!quantity || parseInt(quantity) < 1) {
+                document.getElementById("qty_input").classList.add("border-red-500");
+                valid = false;
+            } else {
+                document.getElementById("qty_input").classList.remove("border-red-500");
+            }
+
+            // Validate required custom fields
+            document.querySelectorAll(".custom-fields [id^='fields']").forEach(el => {
+                if (el.hasAttribute("required")) {
+                    if (el.type === "radio") {
+                        let groupChecked = document.querySelector(`input[name="${el.name}"]:checked`);
+                        if (!groupChecked) {
+                            el.closest('div').classList.add("border-red-500");
+                            valid = false;
+                        } else {
+                            el.closest('div').classList.remove("border-red-500");
+                        }
+                    } else if (el.value.trim() === "") {
+                        el.classList.add("border-red-500");
+                        valid = false;
+                    } else {
+                        el.classList.remove("border-red-500");
+                    }
+                }
+            });
+
+            return valid;
+        }
+
+
+
         // Show modal
         function openPaymentModal() {
             document.getElementById("paymentModal").classList.remove("hidden");
@@ -269,19 +319,14 @@
             document.getElementById("paymentModal").classList.remove("flex");
         }
 
-        // BUY NOW BUTTON
+        // Buy Now Button
         document.querySelector("button[value='buy']").addEventListener("click", async function () {
+            if (!validateBeforeSubmit()) return;
 
-            // Collect data from product page
             let data = collectProductData();
-            openPaymentModal();
 
-            // Update popup message
-            document.getElementById("paymentStatus").innerText = "Preparing secure payment…";
-
-            // Send request to backend to generate Stripe session / payment intent
             try {
-                const response = await fetch("{{ route('buy_now_prepare') }}", {
+                const response = await fetch("{{ route('create_checkout') }}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -293,21 +338,16 @@
                 const res = await response.json();
 
                 if (!response.ok) {
-                    document.getElementById("paymentStatus").innerText = "Error: " + res.message;
+                    alert(res.message || "Something went wrong");
                     return;
                 }
 
-                // When backend returns stripe_session_id or payment_intent_client_secret
-                document.getElementById("paymentStatus").innerText = "Redirecting to Stripe…";
-
-                // Redirect to Stripe Checkout
                 window.location.href = res.redirect_url;
 
             } catch (err) {
-                document.getElementById("paymentStatus").innerText = "Something went wrong.";
                 console.error(err);
             }
-        });                 
+        });               
 
     </script>
 </x-guest-layout>

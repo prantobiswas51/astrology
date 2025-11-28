@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -14,6 +15,14 @@ Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product
 Route::post('/product/add_to_cart', [HomeController::class, 'add_to_cart'])->name('add_to_cart');
 Route::post('/product/buy_now_prepare', [HomeController::class, 'buy_now_prepare'])->name('buy_now_prepare');
 
+// Payment Routes
+Route::post('/checkout/create', [PaymentController::class, 'createCheckout'])->name('create_checkout');
+
+Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
+// Webhook (must be POST)
+Route::post('/stripe/webhook', [PaymentController::class, 'webhook'])->name('stripe.webhook');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
