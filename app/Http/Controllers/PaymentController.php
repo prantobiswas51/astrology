@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Stripe\Stripe;
+use Stripe\Webhook;
 use App\Models\Product;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -77,7 +78,7 @@ class PaymentController extends Controller
         $session = Session::retrieve($request->session_id);
 
         if ($session->payment_status === 'paid') {
-            // update order in database, etc.
+            Log::info("Status Paid");
         }
 
         return view('payment.success', ['session' => $session]);
@@ -97,7 +98,7 @@ class PaymentController extends Controller
         $endpoint_secret = env('ENDPOINT_SECRET');
 
         try {
-            $event = \Stripe\Webhook::constructEvent(
+            $event = Webhook::constructEvent(
                 $payload,
                 $sig_header,
                 $endpoint_secret
