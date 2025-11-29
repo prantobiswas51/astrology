@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,16 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
+
+    private $stripe_api_key;
+    private $endpoint_secret;
+
+    public function __construct()
+    {
+        $this->stripe_api_key = Setting::get('stripe_api_key');
+        $this->endpoint_secret = Setting::get('endpoint_secret');
+    }
+
     public function createCheckout(Request $request)
     {
         // Validate product ID and quantity
@@ -39,7 +50,7 @@ class PaymentController extends Controller
         $quantity = $request->quantity;
         $customer_email = $request->fields['fields[email]'] ?? null;
 
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey($this->stripe_api_key);
 
         $session = Session::create([
             'payment_method_types' => ['card'],
@@ -73,7 +84,7 @@ class PaymentController extends Controller
 
     public function success(Request $request)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey($this->stripe_api_key);
 
         $session = Session::retrieve($request->session_id);
 
@@ -97,12 +108,11 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey($this->stripe_api_key);
 
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
-        $endpoint_secret = env('ENDPOINT_SECRET');
-
+        $endpoint_secret = $this->endpoint_secret;
         try {
             $event = Webhook::constructEvent(
                 $payload,
