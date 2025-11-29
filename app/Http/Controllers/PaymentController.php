@@ -19,12 +19,15 @@ class PaymentController extends Controller
 
     public function __construct()
     {
-        $this->stripe_api_key = Setting::get('stripe_api_key');
-        $this->endpoint_secret = Setting::get('endpoint_secret');
+        $this->stripe_api_key = Setting::value('stripe_api_key');
+        $this->endpoint_secret = Setting::value('endpoint_secret');
     }
 
     public function createCheckout(Request $request)
     {
+
+        dd($this->stripe_api_key, $this->endpoint_secret);
+
         // Validate product ID and quantity
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
