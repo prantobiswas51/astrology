@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->text('notes')->nullable();
             $table->string('number')->unique();
+            $table->string('stripe_session_id')->nullable();
             $table->timestamps();
         });
     }

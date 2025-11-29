@@ -36,6 +36,7 @@ class PaymentController extends Controller
 
         $product = \App\Models\Product::findOrFail($request->product_id);
         $quantity = $request->quantity;
+        $customer_email = $request->fields['fields[email]'] ?? null;
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -57,11 +58,9 @@ class PaymentController extends Controller
         ]);
 
         $order = new \App\Models\Order();
-        $order->product_id = $product->id;
-        $order->quantity = $quantity;
-        $order->amount = ($product->sale_price ?? $product->price) * $quantity;
+        $order->email = $customer_email;
+        $order->total_amount = ($product->sale_price ?? $product->price) * $quantity;
         $order->stripe_session_id = $session->id;
-        $order->custom_fields = json_encode($request->fields);
         $order->status = 'Pending';
         $order->save();
 
