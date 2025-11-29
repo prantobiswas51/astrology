@@ -117,7 +117,6 @@ class PaymentController extends Controller
                     $paymentIntent = $event->data->object;
                     // Payment failed
                     Log::error('Stripe Payment Intent failed', ['payment_intent_id' => $paymentIntent->id]);
-                    
                     break;
             }
 
