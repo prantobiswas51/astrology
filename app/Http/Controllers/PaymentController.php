@@ -7,7 +7,7 @@ use Stripe\Webhook;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
-use Illuminate\Container\Attributes\Log;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -79,6 +79,12 @@ class PaymentController extends Controller
 
         if ($session->payment_status === 'paid') {
             Log::info("Status Paid");
+
+            $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
+            if ($order) {
+                $order->status = 'Completed';
+                $order->save();
+            }
         }
 
         return view('payment.success', ['session' => $session]);
@@ -86,7 +92,7 @@ class PaymentController extends Controller
 
     public function cancel()
     {
-        return "Payment cancelled!";
+        return view('payment.cancel');
     }
 
     public function webhook(Request $request)
