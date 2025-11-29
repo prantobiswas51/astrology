@@ -26,7 +26,7 @@ class PaymentController extends Controller
     public function createCheckout(Request $request)
     {
 
-        dd($this->stripe_api_key, $this->endpoint_secret);
+        // dd($this->stripe_api_key, $this->endpoint_secret);
 
         // Validate product ID and quantity
         $request->validate([
