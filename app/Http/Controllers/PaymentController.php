@@ -90,11 +90,11 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
-        $endpoint_secret = config('services.stripe.webhook_secret');
+        $endpoint_secret = env('ENDPOINT_SECRET');
 
         try {
             $event = \Stripe\Webhook::constructEvent(
