@@ -96,17 +96,17 @@ class PaymentController extends Controller
 
             $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
             if ($order) {
-                $order->status = 'Completed';
+                $order->status = 'Paid';
                 $order->save();
             }
         }
 
-        return view('payment.success', ['session' => $session]);
+        return view('success', ['session' => $session]);
     }
 
     public function cancel()
     {
-        return view('payment.cancel');
+        return view('failed');
     }
 
     public function webhook(Request $request)
