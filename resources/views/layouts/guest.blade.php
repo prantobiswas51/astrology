@@ -16,12 +16,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="text-gray-900">
+<body class="text-gray-900 bg-gradient-to-tr from-sky-900 to-sky-400">
 
     {{-- client design --}}
     @include('layouts.pub_nav')
 
-    <div class="max-w-7xl">
+    <div class="max-w-7xl mx-auto ">
         {{ $slot }}
     </div>
 

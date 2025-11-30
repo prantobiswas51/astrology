@@ -1,18 +1,21 @@
 <x-guest-layout>
-    <div class="bg-sky-300 pb-6 min-h-screen">
+    <div class=" pb-6 min-h-screen mx-auto">
         {{-- Navigation links --}}
         <section class="nav_tag gap-2 w-full flex justify-between bg-gray-200 p-2 rounded">
-            <a href="#birthchart" class="underline">Birth Chart</a>
-            <a href="#birthchart" class="underline">Video Response</a>
-            <a href="#birthchart" class="underline">Phone Call</a>
-            <a href="#birthchart" class="underline">Travel Chart</a>
+            <a href="#birthchart" class="underline">&#8595;Birth Chart</a>
+            <a href="#video_response" class="underline">&#8595;Video Response</a>
+            <a href="#phone_call" class="underline">&#8595;Phone Call</a>
+            <a href="#travel_chart" class="underline">&#8595;Travel Chart</a>
         </section>
 
         {{-- Hero Section --}}
-        <section class="hero_section ">
-            <img src="{{ asset('images/mari_profile.png') }}" class="w-40 rounded-full mx-auto bg-gray-300 mt-6"
-                alt="hero image">
-            <div class="des bg-white p-4 m-4 mt-[-30px] drop-shadow shadow-lg rounded-xl">
+
+
+        <section class="">
+            <img src="{{ asset('images/mari_profile.png') }}"
+                class="w-40 rounded-full mx-auto bg-gray-300 mt-6 relative z-20">
+            <div class="des bg-white p-4 m-4 mt-[-30px] drop-shadow shadow-lg rounded-xl relative z-10">
+
                 <h1 class="text-3xl font-bold text-center mt-4">Mari Astrology</h1>
                 <h2 class="text-center  text-xl mt-2">Astrologer reader! At your service</h2>
                 <div class="text-center italic font-mono font-semibold text-lg">*whispers* I am not a psychic lol</div>
@@ -42,7 +45,7 @@
 
             {{-- product 1 --}}
             <div
-                class="products_grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 pb-6">
+                class="products_grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 pb-6">
 
                 {{-- Product Item --}}
                 <div
@@ -89,61 +92,45 @@
         {{-- Simple readings --}}
 
         <section class="simple_readings ">
-            <h2 class="text-2xl font-bold text-center my-6">Simple Readings</h2>
+            <h2 class="text-2xl font-bold text-center text-gray-100 my-6">Simple Readings</h2>
 
-            {{-- Loop this --}}
-            <div
-                class="readings_grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 pb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 pb-6">
 
-                {{-- Reading Item --}}
+
+
+                {{-- Loop this item --}}
                 <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
                     <div class="flex">
                         <img src="" alt="Product Image"
-                            class="w-full h-40 mr-2 object-cover mb-4 bg-gray-200 rounded-lg">
-                        <div class="">
-                            <h3 class="text-xl font-semibold mb-2">Birth Chart Reading</h3>
-                            <p class="text-sky-600 drop-shadow text-md font-semibold mb-2">Get insights into your love
-                                life
-                                and relationships with this focused reading.</p>
-                            <h2 class="font-bold text-xl drop-shadow text-sky-800/50"><del>$35</del> <span
-                                    class="text-gray-800">$30</span> </h2>
+                            class="min-w-32 min-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Birth Chart Reading</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Get insights into your love life and relationships with this focused reading.
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$35</del> <span class="text-gray-800">$30</span>
+                            </h2>
                         </div>
                     </div>
+
                     <a href="{{ route('product_view', ['slug' => 'birth-chart-reading']) }}">
-                        <button class="mt-auto bg-gray-900 font-extrabold py-2 px-4 
-                        rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Get Your Reading
-                            Now</button>
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
                     </a>
+
                 </div>
+
+
+                {{-- COPY-PASTE ABOVE FOR MORE ITEMS --}}
             </div>
 
-            {{-- Loop this --}}
-            <div
-                class="readings_grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 pb-6">
-
-                {{-- Reading Item --}}
-                <div
-                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
-                    <div class="flex">
-                        <img src="" alt="Product Image"
-                            class="w-full h-40 mr-2 object-cover mb-4 bg-gray-200 rounded-lg">
-                        <div class="">
-                            <h3 class="text-xl font-semibold mb-2">Birth Chart Reading</h3>
-                            <p class="text-sky-600 drop-shadow text-md font-semibold mb-2">Get insights into your love
-                                life
-                                and relationships with this focused reading.</p>
-                            <h2 class="font-bold text-xl drop-shadow text-sky-800/50"><del>$35</del> <span
-                                    class="text-gray-800">$30</span> </h2>
-                        </div>
-                    </div>
-                    <a href="{{ route('product_view', ['slug' => 'birth-chart-reading']) }}">
-                        <button class="mt-auto bg-gray-900 font-extrabold py-2 px-4 
-                        rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Get Your Reading
-                            Now</button>
-                    </a>
-                </div>
-            </div>
 
         </section>
 

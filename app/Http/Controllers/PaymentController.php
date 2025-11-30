@@ -35,6 +35,8 @@ class PaymentController extends Controller
             'fields' => 'required|array',
         ]);
 
+        // dd($request->fields);
+
         // Validate custom fields dynamically
         foreach ($request->fields as $key => $value) {
             if (empty($value)) {
