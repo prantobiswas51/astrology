@@ -103,8 +103,8 @@
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
-                        <img src="" alt="Product Image"
-                            class="min-w-32 min-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+                        <img src="{{ asset('storage/products/images/01KBDG1S0TMSVQA5W6YTPKG54X.jpg') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Birth Chart Reading</h3>

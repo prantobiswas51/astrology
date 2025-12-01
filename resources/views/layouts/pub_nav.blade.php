@@ -54,8 +54,8 @@
                 <!-- Nav Links -->
                 <div class="p-2 nav-link flex items-center space-x-4">
                     <a class="p-2" href="{{ route('home') }}">Home</a>
-                    <a class="p-2" href="{{ route('home') }}">Shop</a>
-                    <a class="p-2" href="{{ route('home') }}">Cart</a>
+                    <a class="p-2" href="{{ route('shop') }}">Shop</a>
+                    <a class="p-2" href="{{ route('cart') }}">Cart</a>
                     <a class="p-2" href="{{ route('home') }}">Privacy Policy</a>
                     <a class="p-2" href="{{ route('home') }}">Terms & Conditions</a>
                 </div>

@@ -16,7 +16,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="text-gray-900 bg-gradient-to-tr from-sky-900 to-sky-400">
+<body class="text-gray-900 bg-gradient-to-tr from-sky-900 to-sky-400 bg-no-repeat bg-cover min-h-screen font-sans">
 
     {{-- client design --}}
     @include('layouts.pub_nav')

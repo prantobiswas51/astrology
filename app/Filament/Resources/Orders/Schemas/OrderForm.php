@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Orders\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
@@ -23,12 +24,15 @@ class OrderForm
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                TextInput::make('status')
+                Select::make('status')->options([
+                    'Pending' => 'Pending',
+                    'Paid'    => 'Paid',
+                    'Canceled' => 'Canceled',
+                ])
                     ->required()
-                    ->default('pending'),
+                    ->default('Pending'),
                 Textarea::make('notes')
                     ->columnSpanFull(),
-                TextInput::make('stripe_session_id'),
             ]);
     }
 }
