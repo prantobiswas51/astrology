@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('email');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->decimal('total_amount', 10, 2)->default(0);
-            $table->string('status')->default('pending');
+            $table->string('status')->default('Pending');
             $table->text('notes')->nullable();
             $table->string('stripe_session_id')->nullable();
             $table->timestamps();
