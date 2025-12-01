@@ -43,14 +43,16 @@
             <!-- IMAGE SECTION -->
             <div>
                 <div class="w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
-                    <img id="mainImage" data-image="{{ asset('storage/' . $product->image1_path) }}" src="{{ asset('storage/' . $product->image1_path) }}" class="w-full h-full object-cover">
+                    <img id="mainImage" data-image="{{ asset('storage/' . $product->image1_path) }}"
+                        src="{{ asset('storage/' . $product->image1_path) }}" class="w-full h-full object-cover">
 
                 </div>
 
                 <!-- Thumbnail Images -->
                 <div class="grid grid-cols-4 gap-4 mt-4">
                     @foreach (['image1_path','image2_path','image3_path','image4_path'] as $img)
-                    @php $path = $product->$img ? asset('storage/' . $product->$img) : asset('images/no_img.png'); @endphp
+                    @php $path = $product->$img ? asset('storage/' . $product->$img) : asset('images/no_img.png');
+                    @endphp
                     <div class="bg-gray-100 h-24 border rounded-lg overflow-hidden cursor-pointer thumb"
                         data-image="{{ $path }}">
                         <img src="{{ $path }}" class="w-full h-full object-cover">
@@ -93,18 +95,17 @@
 
                 <!-- Dynamic Custom Fields -->
                 <div class="custom-fields">
+
+                    <label class="block mb-1 mt-6">Email</label>
+                    <input type="email" name="email" id="email" placeholder="yourmail@domain.com" required
+                        class="border rounded-lg w-full p-2 mb-3 border-gray-300">
+
                     @foreach($fields as $field)
                     <div class="mb-3">
                         <label class="block mb-1">{{ $field['label'] }}</label>
 
                         @if($field['type'] === 'text')
                         <input id="fields[{{ $field['id'] }}]" type="text" name="fields[{{ $field['name'] }}]"
-                            @if($field['placeholder']) placeholder="{{ $field['placeholder'] }}" @endif
-                            class="border rounded-lg w-full p-2 mb-3 border-gray-300" @if($field['required']) required
-                            @endif>
-
-                        @elseif($field['type'] === 'email')
-                        <input id="fields[{{ $field['id'] }}]" type="email" name="fields[{{ $field['name'] }}]"
                             @if($field['placeholder']) placeholder="{{ $field['placeholder'] }}" @endif
                             class="border rounded-lg w-full p-2 mb-3 border-gray-300" @if($field['required']) required
                             @endif>
@@ -211,6 +212,7 @@
 
             // Quantity
             let quantity = document.getElementById("qty_input").value;
+            let email = document.getElementById("email").value;
 
             // Dynamic fields
             let fields = {};
@@ -234,7 +236,8 @@
                 product_id: productId,
                 quantity: quantity,
                 fields: fields,
-                action: actionType
+                action: actionType,
+                email: email
             };
 
             return data;            
@@ -275,11 +278,20 @@
 
             // Validate quantity
             let quantity = document.getElementById("qty_input").value;
+            let email = document.getElementById("email").value;
+            
             if (!quantity || parseInt(quantity) < 1) {
                 document.getElementById("qty_input").classList.add("border-red-500");
                 valid = false;
             } else {
                 document.getElementById("qty_input").classList.remove("border-red-500");
+            }
+
+            if (!email || !email.trim()) {
+                document.getElementById("email").classList.add("border-red-500");
+                valid = false;
+            } else {
+                document.getElementById("email").classList.remove("border-red-500");
             }
 
             // Validate required custom fields

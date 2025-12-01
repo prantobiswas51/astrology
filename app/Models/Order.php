@@ -12,5 +12,6 @@ class Order extends Model
         'status',
         'notes',
         'stripe_session_id',
+        'user_id',
     ];
 }

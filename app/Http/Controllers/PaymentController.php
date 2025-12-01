@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Stripe\Stripe;
 use Stripe\Webhook;
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -25,17 +27,12 @@ class PaymentController extends Controller
 
     public function createCheckout(Request $request)
     {
-
-        // dd($this->stripe_api_key, $this->endpoint_secret);
-
         // Validate product ID and quantity
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
             'quantity' => 'required|integer|min:1',
             'fields' => 'required|array',
         ]);
-
-        // dd($request->fields);
 
         // Validate custom fields dynamically
         foreach ($request->fields as $key => $value) {
@@ -45,15 +42,27 @@ class PaymentController extends Controller
         }
 
         // Example: validate email field
-        if (isset($request->fields['fields[email]'])) {
-            if (!filter_var($request->fields['fields[email]'], FILTER_VALIDATE_EMAIL)) {
+        $email = $request->input('email');
+
+        if ($email !== null) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 dd('Invalid email format.');
             }
         }
 
+
         $product = \App\Models\Product::findOrFail($request->product_id);
         $quantity = $request->quantity;
-        $customer_email = $request->fields['fields[email]'] ?? null;
+
+        // 
+        $customer_email = $email ?? null;
+        $name_zodiac = $request->fields['fields[name_zodiac]'] ?? null;
+        $birht_date = $request->fields['fields[dob]'] ?? null;
+        $birth_time = $request->fields['fields[tob]'] ?? null;
+        $birth_place = $request->fields['fields[pob]'] ?? null;
+        $gender = $request->fields['fields[gender]'] ?? null;
+        $detail_question = $request->fields['fields[detailed_qs]'] ?? null;
+
 
         Stripe::setApiKey($this->stripe_api_key);
 
@@ -76,10 +85,37 @@ class PaymentController extends Controller
 
         $order = new \App\Models\Order();
         $order->email = $customer_email;
+        $order->user_id = Auth::id() ?? null;
         $order->total_amount = ($product->sale_price ?? $product->price) * $quantity;
         $order->stripe_session_id = $session->id;
         $order->status = 'Pending';
         $order->save();
+
+        // I need to save custom fields which are not null, if null ignore them
+        $orderItem = new \App\Models\OrderItem();
+        $orderItem->order_id = $order->id;
+        $orderItem->product_id = $product->id;
+        $orderItem->quantity = $quantity;
+        $orderItem->price = ($product->sale_price ?? $product->price);
+
+        $extra = [
+            'name_zodiac' => $name_zodiac,
+            'birth_date' => $birht_date,
+            'birth_time' => $birth_time,
+            'birth_place' => $birth_place,
+            'gender' => $gender,
+            'detail_question' => $detail_question,
+        ];
+
+        // Remove all null or empty values
+        $extra = array_filter($extra, function ($v) {
+            return !is_null($v) && $v !== '';
+        });
+
+        $orderItem->extra_information = json_encode($extra);
+
+
+        $orderItem->save();
 
         return response()->json([
             'success' => true,

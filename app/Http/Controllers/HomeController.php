@@ -17,5 +17,11 @@ class HomeController extends Controller
     {
         $product = Product::where('slug', $slug)->firstOrFail();
         return view('layouts.single_product', compact('product'));
-    }   
+    }
+
+    public function shop()
+    {
+        $products = Product::all();
+        return view('shop', compact('products'));
+    }
 }
