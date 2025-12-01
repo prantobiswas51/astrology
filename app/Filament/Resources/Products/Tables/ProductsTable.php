@@ -5,7 +5,9 @@ namespace App\Filament\Resources\Products\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Schemas\Components\Image;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -20,6 +22,8 @@ class ProductsTable
                     ->sortable(),
                 TextColumn::make('type')
                     ->badge(),
+                ImageColumn::make('image1_path')
+                    ->label('Image'),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('slug')

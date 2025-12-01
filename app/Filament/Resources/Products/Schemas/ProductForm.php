@@ -32,36 +32,50 @@ class ProductForm
                             CodeEditor::make('custom_html')->columnSpanFull(),
                             Repeater::make('fields')
                                 ->schema([
-                                    TextInput::make('label')->required(),
-                                    TextInput::make('name')->required(),
-                                    TextInput::make('id')->required(),
 
-                                    Select::make('type')
-                                        ->options([
-                                            'text'     => 'Text',
-                                            'email'    => 'Email',
-                                            'number'   => 'Number',
-                                            'textarea' => 'Textarea',
-                                            'select'   => 'Dropdown',
-                                            'radio'    => 'Radio',
-                                            'date'     => 'Date',
-                                            'checkbox' => 'Checkbox',
-                                        ])
-                                        ->required(),
+                                    // Row 1 (3 columns)
+                                    Grid::make(3)->schema([
+                                        TextInput::make('label')->required(),
+                                        TextInput::make('name')->required(),
+                                        TextInput::make('id')->required(),
+                                    ]),
 
-                                    TextInput::make('placeholder')->nullable()
-                                        ->helperText('Optional placeholder for text/number/email/textarea fields'),
+                                    // Row 2 (3 columns)
+                                    Grid::make(3)->schema([
+                                        Select::make('type')
+                                            ->options([
+                                                'text'     => 'Text',
+                                                'email'    => 'Email',
+                                                'number'   => 'Number',
+                                                'textarea' => 'Textarea',
+                                                'select'   => 'Dropdown',
+                                                'radio'    => 'Radio',
+                                                'date'     => 'Date',
+                                                'checkbox' => 'Checkbox',
+                                            ])
+                                            ->required(),
 
-                                    Textarea::make('options')->nullable()
-                                        ->label('Options')
-                                        ->helperText('Comma-separated options for select or radio fields, e.g. Male,Female,Other')
-                                        ->visible(fn($get) => in_array($get('type'), ['select', 'radio'])),
+                                        TextInput::make('placeholder')
+                                            ->nullable(),
+                                        TextInput::make('order')->numeric()->default(1),
+                                        // last column of second row
+                                    ]),
 
-                                    Toggle::make('required')->label('Required'),
+                                    // Options & order in full width under the grid
+                                    Grid::make(2)->schema([
+                                        Textarea::make('options')
+                                            ->label('Options')
+                                            ->helperText('Comma-separated options for select or radio fields')
+                                            ->visible(fn($get) => in_array($get('type'), ['select', 'radio'])),
 
-                                    TextInput::make('order')->numeric()->default(1),
+
+                                        Toggle::make('required')
+                                            ->label('Required'),
+                                    ])->columnSpanFull(),
+
                                 ])
-                                ->columnSpanFull()
+                                ->columnSpanFull(),
+
 
                         ])
                         ->columns(1)
@@ -94,7 +108,7 @@ class ProductForm
                                     'published' => 'Published',
                                 ])->required(),
                             FileUpload::make('image1_path')->disk('public')->directory('products/images'),
-                            FileUpload::make('image2_path')->disk('public')->directory('/products/images'),
+                            FileUpload::make('image2_path')->disk('public')->directory('products/images'),
                             FileUpload::make('image3_path')->disk('public')->directory('products/images'),
                             FileUpload::make('image4_path')->disk('public')->directory('products/images'),
                         ])

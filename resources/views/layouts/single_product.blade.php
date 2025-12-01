@@ -43,14 +43,14 @@
             <!-- IMAGE SECTION -->
             <div>
                 <div class="w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
-                    <img id="mainImage" src="{{ asset($product->image1_path) }}" class="w-full h-full object-cover">
+                    <img id="mainImage" data-image="{{ asset('storage/' . $product->image1_path) }}" src="{{ asset('storage/' . $product->image1_path) }}" class="w-full h-full object-cover">
 
                 </div>
 
                 <!-- Thumbnail Images -->
                 <div class="grid grid-cols-4 gap-4 mt-4">
                     @foreach (['image1_path','image2_path','image3_path','image4_path'] as $img)
-                    @php $path = $product->$img ? asset($product->$img) : asset('images/no_img.png'); @endphp
+                    @php $path = $product->$img ? asset('storage/' . $product->$img) : asset('images/no_img.png'); @endphp
                     <div class="bg-gray-100 h-24 border rounded-lg overflow-hidden cursor-pointer thumb"
                         data-image="{{ $path }}">
                         <img src="{{ $path }}" class="w-full h-full object-cover">
