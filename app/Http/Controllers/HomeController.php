@@ -13,12 +13,6 @@ class HomeController extends Controller
         return view('welcome', compact('products'));
     }
 
-    public function product($slug)
-    {
-        $product = Product::where('slug', $slug)->firstOrFail();
-        return view('layouts.single_product', compact('product'));
-    }
-
     public function shop()
     {
         $products = Product::all();

@@ -17,12 +17,11 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('category_id')
-                    ->numeric()
+                TextColumn::make('category.name')
                     ->sortable(),
                 TextColumn::make('type')
                     ->badge(),
-                ImageColumn::make('image1_path')
+                ImageColumn::make('image1_path')->disk('public')
                     ->label('Image'),
                 TextColumn::make('name')
                     ->searchable(),

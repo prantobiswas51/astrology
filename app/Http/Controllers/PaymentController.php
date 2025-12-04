@@ -27,41 +27,64 @@ class PaymentController extends Controller
 
     public function createCheckout(Request $request)
     {
+
         // Validate product ID and quantity
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
             'quantity' => 'required|integer|min:1',
-            'fields' => 'required|array',
         ]);
+
+        $product = \App\Models\Product::find($request->product_id);
+
+        if ($product->type != 'digital') {
+            $request->validate([
+                'fields' => 'required|array',
+            ]);
+        } else {
+            $request->validate([
+                'fields' => 'nullable|array',
+            ]);
+        }
 
         // Validate custom fields dynamically
         foreach ($request->fields as $key => $value) {
             if (empty($value)) {
-                dd("Field {$key} is required.");
+                return response()->json([
+                    'success' => false,
+                    'message' => "Field {$key} is required.",
+                ], 400);
             }
         }
+
+        // dd($request->all());
 
         // Example: validate email field
         $email = $request->input('email');
 
         if ($email !== null) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                dd('Invalid email format.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid email format.',
+                ], 400);
             }
         }
+
+        // dd($request->all());
 
 
         $product = \App\Models\Product::findOrFail($request->product_id);
         $quantity = $request->quantity;
 
-        // 
-        $customer_email = $email ?? null;
+        $customer_email = $email;
         $name_zodiac = $request->fields['fields[name_zodiac]'] ?? null;
         $birht_date = $request->fields['fields[dob]'] ?? null;
         $birth_time = $request->fields['fields[tob]'] ?? null;
         $birth_place = $request->fields['fields[pob]'] ?? null;
         $gender = $request->fields['fields[gender]'] ?? null;
         $detail_question = $request->fields['fields[detailed_qs]'] ?? null;
+        $cell_number = $request->fields['fields[cell_number]'] ?? null;
+        $insta_id = $request->fields['fields[insta_id]'] ?? null;
 
 
         Stripe::setApiKey($this->stripe_api_key);
@@ -98,6 +121,8 @@ class PaymentController extends Controller
         $orderItem->quantity = $quantity;
         $orderItem->price = ($product->sale_price ?? $product->price);
 
+        // allow users to save files in the dashboard and Mail them the links after purchase
+
         $extra = [
             'name_zodiac' => $name_zodiac,
             'birth_date' => $birht_date,
@@ -105,6 +130,8 @@ class PaymentController extends Controller
             'birth_place' => $birth_place,
             'gender' => $gender,
             'detail_question' => $detail_question,
+            'cell_number' => $cell_number,
+            'insta_id' => $insta_id,
         ];
 
         // Remove all null or empty values
@@ -113,7 +140,6 @@ class PaymentController extends Controller
         });
 
         $orderItem->extra_information = json_encode($extra);
-
 
         $orderItem->save();
 

@@ -44,8 +44,8 @@
             <div>
                 <div class="w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
                     <img id="mainImage" data-image="{{ asset('storage/' . $product->image1_path) }}"
-                        src="{{ asset('storage/' . $product->image1_path) }}" class="w-full h-full object-cover">
-
+                        src="{{ asset('storage/' . $product->image1_path) }}"
+                        class="w-auto mx-auto h-full object-cover ">
                 </div>
 
                 <!-- Thumbnail Images -->
@@ -59,7 +59,6 @@
                     </div>
                     @endforeach
                 </div>
-
             </div>
 
             <!-- PRODUCT INFO -->
@@ -87,11 +86,10 @@
                     </div>
                 </div>
 
+
                 @php
                 $fields = collect($product->fields)->sortBy('order');
                 @endphp
-
-
 
                 <!-- Dynamic Custom Fields -->
                 <div class="custom-fields">
@@ -99,6 +97,7 @@
                     <label class="block mb-1 mt-6">Email</label>
                     <input type="email" name="email" id="email" placeholder="yourmail@domain.com" required
                         class="border rounded-lg w-full p-2 mb-3 border-gray-300">
+
 
                     @foreach($fields as $field)
                     <div class="mb-3">
@@ -151,6 +150,20 @@
                     </div>
                     @endforeach
                 </div>
+
+                @if ($product->type == "digital")
+                <!-- Digital Product Note -->
+                <p class="my-4 text-sm text-gray-500">
+                    Note: This is a digital product. After purchase, you will receive a download link via email.
+                </p>
+
+                {{-- {{ ($product_files) }} --}}
+
+                @foreach ($product_files as $file)
+                    <input type="checkbox" class="rounded-md" name="files[]" id="file_{{ $file['id'] }}"> {{ $file['file_name'] }} <br>
+                @endforeach
+
+                @endif
 
                 <!-- Action Buttons -->
                 <div class="flex gap-3 mt-4">
@@ -206,8 +219,9 @@
 
         // get all data like fields data and quantity and product slug or id here for further processing on form submission
         /* ======================================================
-       COLLECT ALL DATA ON BUTTON CLICK
-       ====================================================== */
+        COLLECT ALL DATA ON BUTTON CLICK
+        ====================================================== */
+        
         function collectProductData(actionType) {
 
             // Quantity
@@ -217,8 +231,8 @@
             // Dynamic fields
             let fields = {};
             document.querySelectorAll(".custom-fields [id^='fields']").forEach(el => {
-                let key = el.getAttribute("name");   // example: fields[email]
-                
+                let key = el.getAttribute("name");
+
                 if (el.type === "radio") {
                     if (el.checked) fields[key] = el.value;
                 } else {
@@ -226,23 +240,26 @@
                 }
             });
 
-            // Product ID (safe)
             let productId = "{{ $product->id }}";
 
-            // OR product slug if you prefer:
-            // let productSlug = "{{ $product->slug }}";
+            // ⬅️ NEW — Collect selected files
+            let selectedFiles = [];
+            document.querySelectorAll("input[name='files[]']:checked").forEach(el => {
+                selectedFiles.push(el.id.replace("file_", ""));
+            });
 
             let data = {
-                product_id: productId,
+                product_id: "{{ $product->id }}",
                 quantity: quantity,
                 fields: fields,
-                action: actionType,
-                email: email
+                email: email,
+                files: selectedFiles,
+                action: actionType
             };
 
-            return data;            
-
+            return data;
         }
+
 
 
         // Attach to Buy Now & Add to Cart buttons
@@ -279,7 +296,7 @@
             // Validate quantity
             let quantity = document.getElementById("qty_input").value;
             let email = document.getElementById("email").value;
-            
+
             if (!quantity || parseInt(quantity) < 1) {
                 document.getElementById("qty_input").classList.add("border-red-500");
                 valid = false;
@@ -317,7 +334,10 @@
             return valid;
         }
 
-
+        function validateFiles() {
+            let filesChecked = document.querySelectorAll("input[name='files[]']:checked").length;
+            return filesChecked > 0;
+        }
 
         // Show modal
         function openPaymentModal() {
@@ -336,6 +356,11 @@
             if (!validateBeforeSubmit()) return;
 
             let data = collectProductData();
+
+            if ("{{ $product->type }}" === "digital" && !validateFiles()) {
+                alert("Please select at least one file.");
+                return;
+            }
 
             try {
                 const response = await fetch("{{ route('create_checkout') }}", {
