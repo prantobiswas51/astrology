@@ -13,4 +13,9 @@ class ProductController extends Controller
         $product_files = $product->files;
         return view('layouts.single_product', compact('product', 'product_files'));
     }
+
+    public function add_to_cart(Request $request)
+    {
+        dd($request->all());
+    }
 }

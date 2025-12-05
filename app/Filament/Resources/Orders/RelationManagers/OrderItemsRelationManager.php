@@ -55,62 +55,83 @@ class OrderItemsRelationManager extends RelationManager
             ->columns([
                 Stack::make([
                     TextColumn::make('product.name')
-                    ->label('Product')
-                    ->searchable()
-                    ->sortable(),
+                        ->label('Product')
+                        ->searchable()
+                        ->sortable(),
 
-                TextColumn::make('quantity')
-                    ->numeric()
-                    ->sortable(),
+                    TextColumn::make('quantity')
+                        ->numeric()
+                        ->sortable(),
 
-                TextColumn::make('price')
-                    ->money('USD')
-                    ->sortable(),
+                    TextColumn::make('price')
+                        ->money('USD')
+                        ->sortable(),
 
-                TextColumn::make('total')
-                    ->label('Total')
-                    ->money('USD')
-                    ->getStateUsing(fn($record) => $record->quantity * $record->price),
+                    TextColumn::make('total')
+                        ->label('Total')
+                        ->money('USD')
+                        ->getStateUsing(fn($record) => $record->quantity * $record->price),
                 ]),
 
                 TextColumn::make('extra_information')
                     ->label('Extra Information')
-                    ->formatStateUsing(function ($state) {
+                    ->formatStateUsing(function ($state, $record) {
                         if (empty($state)) {
                             return 'N/A';
                         }
 
-                        // Decode JSON if it's a string
+                        // Decode JSON stored as string
                         if (is_string($state)) {
                             $decoded = json_decode($state, true);
-
-                            // If JSON invalid or not an array
                             if (!is_array($decoded)) {
                                 return 'N/A';
                             }
-
                             $state = $decoded;
                         }
 
-                        // If it's already an array
-                        if (is_array($state) && !empty($state)) {
-                            $formatted = [];
+                        /*
+                        |--------------------------------------------------------------------------
+                        | DIGITAL PRODUCT HANDLING
+                        | Detect using product->type == 'digital'
+                        |--------------------------------------------------------------------------
+                        */
+                        
+                        if ($record->product && $record->product->type === 'digital') {
+                            if (isset($state['file_ids']) && is_array($state['file_ids'])) {
+                                $files = \App\Models\ProductFile::whereIn('id', $state['file_ids'])->get();
 
-                            foreach ($state as $key => $value) {
-                                if (!is_scalar($value)) {
-                                    continue;
+                                if ($files->isEmpty()) {
+                                    return 'Files not found';
                                 }
 
-                                $label = ucfirst(str_replace('_', ' ', $key));
-                                $formatted[] = "<strong>{$label}:</strong> " . e($value);
+                                $result = [];
+                                foreach ($files as $file) {
+                                    $result[] = "<strong>File:</strong> " . e($file->file_name);
+                                }
+
+                                return implode('<br>', $result);
                             }
 
-                            return !empty($formatted)
-                                ? implode('<br>', $formatted)
-                                : 'N/A';
+                            return 'No files';
                         }
 
-                        return 'N/A';
+                        /*
+                        |--------------------------------------------------------------------------
+                        | DEFAULT HANDLING (your original behavior)
+                        |--------------------------------------------------------------------------
+                        */
+                        $formatted = [];
+
+                        foreach ($state as $key => $value) {
+                            if (!is_scalar($value)) {
+                                continue;
+                            }
+
+                            $label = ucfirst(str_replace('_', ' ', $key));
+                            $formatted[] = "<strong>{$label}:</strong> " . e($value);
+                        }
+
+                        return !empty($formatted) ? implode('<br>', $formatted) : 'N/A';
                     })
                     ->html()
                     ->wrap()

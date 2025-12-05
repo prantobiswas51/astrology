@@ -160,7 +160,8 @@
                 {{-- {{ ($product_files) }} --}}
 
                 @foreach ($product_files as $file)
-                    <input type="checkbox" class="rounded-md" name="files[]" id="file_{{ $file['id'] }}"> {{ $file['file_name'] }} <br>
+                <input type="checkbox" class="rounded-md" name="files[]" id="file_{{ $file['id'] }}"> {{
+                $file['file_name'] }} <br>
                 @endforeach
 
                 @endif
@@ -172,10 +173,10 @@
                         Buy Now
                     </button>
 
-                    <button type="submit" name="action" value="add"
+                    {{-- <button type="submit" name="action" value="add"
                         class="bg-gray-800 hover:scale-105 hover:transition-shadow text-white px-4 py-2 rounded">
                         Add to Cart
-                    </button>
+                    </button> --}}
                 </div>
 
                 <!-- Extra Details -->
@@ -264,27 +265,27 @@
 
         // Attach to Buy Now & Add to Cart buttons
 
-        document.querySelector("button[value='add']").addEventListener("click",  async function () {
-            let data = collectProductData();
+        // document.querySelector("button[value='add']").addEventListener("click",  async function () {
+        //     let data = collectProductData();
 
-            const response = await fetch("{{ route('add_to_cart') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify(data)
-            });
+        //     const response = await fetch("{{ route('add_to_cart') }}", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        //         },
+        //         body: JSON.stringify(data)
+        //     });
 
-            const res = await response.json();
+        //     const res = await response.json();
 
-            if (response.ok) {
-                alert("Added to cart successfully!");
-                console.log(res);
-            } else {
-                alert("Error: " + res.message);
-            }
-        });        
+        //     if (response.ok) {
+        //         alert("Added to cart successfully!");
+        //         console.log(res);
+        //     } else {
+        //         alert("Error: " + res.message);
+        //     }
+        // });        
 
 
         // VALIDATION FUNCTION — REQUIRED FIELDS MUST NOT BE EMPTY

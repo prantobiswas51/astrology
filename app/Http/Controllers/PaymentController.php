@@ -35,6 +35,13 @@ class PaymentController extends Controller
         ]);
 
         $product = \App\Models\Product::find($request->product_id);
+        $selectedFiles = $request->input('files', []);
+
+        if (!is_array($selectedFiles)) {
+            $selectedFiles = [$selectedFiles];  //Array
+        }
+
+        $numberOfFiles = count($selectedFiles);
 
         if ($product->type != 'digital') {
             $request->validate([
@@ -86,6 +93,12 @@ class PaymentController extends Controller
         $cell_number = $request->fields['fields[cell_number]'] ?? null;
         $insta_id = $request->fields['fields[insta_id]'] ?? null;
 
+        if($numberOfFiles){
+            $before_price = ($product->sale_price ?? $product->price);
+            $final_price = $before_price * $numberOfFiles;
+        }else{
+            $final_price = ($product->sale_price ?? $product->price);
+        }
 
         Stripe::setApiKey($this->stripe_api_key);
 
@@ -97,7 +110,7 @@ class PaymentController extends Controller
                     'product_data' => [
                         'name' => $product->name,
                     ],
-                    'unit_amount' => ($product->sale_price ?? $product->price) * 100, // cents
+                    'unit_amount' => $final_price * 100, // cents
                 ],
                 'quantity' => $quantity,
             ]],
@@ -132,6 +145,7 @@ class PaymentController extends Controller
             'detail_question' => $detail_question,
             'cell_number' => $cell_number,
             'insta_id' => $insta_id,
+            'file_ids' => $selectedFiles,
         ];
 
         // Remove all null or empty values
@@ -140,7 +154,6 @@ class PaymentController extends Controller
         });
 
         $orderItem->extra_information = json_encode($extra);
-
         $orderItem->save();
 
         return response()->json([
@@ -168,9 +181,23 @@ class PaymentController extends Controller
         return view('success', ['session' => $session]);
     }
 
-    public function cancel()
+    public function cancel(Request $request)
     {
-        return view('failed');
+        Stripe::setApiKey($this->stripe_api_key);
+
+        $session = Session::retrieve($request->session_id);
+
+        if ($session->payment_status === 'failed') {
+            Log::info("Status Paid");
+
+            $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
+            if ($order) {
+                $order->status = 'Failed';
+                $order->save();
+            }
+        }
+
+        return view('success', ['session' => $session]);
     }
 
     public function webhook(Request $request)
