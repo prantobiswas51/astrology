@@ -31,7 +31,7 @@ class DashboardController extends Controller
         }
 
         // Check if the current user is allowed
-        if ($order->user_id !== Auth::id()) {
+        if ($order->user_id != Auth::id()) {
             abort(403, 'You do not have permission to download this file.');
         }
 
