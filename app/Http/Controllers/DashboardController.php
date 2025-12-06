@@ -25,8 +25,12 @@ class DashboardController extends Controller
         $orderItem = $file->orderItems()->first();
         $order = $orderItem->order ?? null;
 
+        if (!$order) {
+            abort(404, 'It\'s Null.');
+        }
+
         // Check if the current user is allowed
-        if (!$order || $order->user_id !== Auth::id()) {
+        if ($order->user_id !== Auth::id()) {
             abort(403, 'You do not have permission to download this file.');
         }
 
@@ -35,6 +39,7 @@ class DashboardController extends Controller
         }
 
         // Return download response
+        // dd(storage_path('app/' . $file->file_path));
         return response()->download(storage_path('app/' . $file->file_path), $file->file_name);
     }
 }
