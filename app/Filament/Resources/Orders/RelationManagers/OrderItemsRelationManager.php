@@ -60,11 +60,7 @@ class OrderItemsRelationManager extends RelationManager
                         ->sortable(),
 
                     TextColumn::make('quantity')
-                        ->numeric()
-                        ->sortable(),
-
-                    TextColumn::make('price')
-                        ->money('USD')
+                        ->numeric()->prefix('Qnt: ')
                         ->sortable(),
 
                     TextColumn::make('total')
@@ -140,6 +136,7 @@ class OrderItemsRelationManager extends RelationManager
 
                 TextColumn::make('created_at')
                     ->dateTime()
+                    ->prefix('Created: ')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

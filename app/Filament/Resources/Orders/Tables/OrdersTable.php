@@ -25,6 +25,12 @@ class OrdersTable
 
                         TextColumn::make('user.name')
                             ->label('Username')
+                            ->sortable()
+                            ->formatStateUsing(fn($state, $record) => $record->user?->name ?? 'Guest'),
+                        
+                        TextColumn::make('id')
+                            ->label('Order ID')
+                            ->prefix('#')
                             ->sortable(),
 
                         TextColumn::make('created_at')
@@ -43,19 +49,18 @@ class OrdersTable
                         TextColumn::make('status')
                             ->label('Status')
                             ->badge()
-                            ->color(fn ($state) => match (strtolower($state)) {
+                            ->color(fn($state) => match (strtolower($state)) {
                                 'pending' => 'warning',
                                 'paid'    => 'success',
                                 default   => 'gray',
                             })
                             ->sortable(),
-                        TextColumn::make('updated_at')
-                            ->label('Updated At')
-                            ->dateTime('M d, Y H:i')
+                        TextColumn::make('order_status')
+                            ->label('Order Status')
                             ->sortable(),
                     ]),
                 ])->columnSpanFull(),
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->recordActions([
                 EditAction::make(),
             ])

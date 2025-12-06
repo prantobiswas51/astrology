@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,24 +10,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
-    }
 
-    public function orders()
-    {
-        $orders = Auth::user()
-            ->orders()
-            ->orderByDesc('created_at')
-            ->get();
+        $orders = Order::with(['orderItems.product', 'orderItems.product.files'])
+                   ->where('user_id', Auth::id())
+                   ->get();
 
-        return view('dashboard.orders', compact('orders'));
-    }
-
-
-    public function addresses()
-    {
-        $user = Auth::user();
-
-        return view('dashboard.addresses', compact('user'));
+        return view('dashboard', compact('orders'));
     }
 }

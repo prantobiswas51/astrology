@@ -17,9 +17,9 @@ class OrderForm
                     ->label('Email address')
                     ->email()
                     ->required(),
-                TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->label('User')->disabled(),
                 TextInput::make('total_amount')
                     ->required()
                     ->numeric()
@@ -31,6 +31,12 @@ class OrderForm
                 ])
                     ->required()
                     ->default('Pending'),
+                Select::make('order_status')->options([
+                    'Processing' => 'Processing',
+                    'Completed' => 'Completed',
+                    'Canceled' => 'Canceled',
+                ])->required()->default('Processing'),
+
                 Textarea::make('notes')
                     ->columnSpanFull(),
             ]);

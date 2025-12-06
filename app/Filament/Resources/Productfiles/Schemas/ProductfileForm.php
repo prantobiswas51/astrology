@@ -14,7 +14,7 @@ class ProductfileForm
         return $schema
             ->components([
                 Select::make('product_id')
-                    ->relationship('product', 'name')
+                    ->relationship('product', 'name', fn($query) => $query->where('type', 'digital'))
                     ->required()
                     ->preload(),
                 TextInput::make('file_name')

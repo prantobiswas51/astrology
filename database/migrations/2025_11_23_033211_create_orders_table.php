@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status')->default('Pending');
             $table->text('notes')->nullable();
             $table->string('stripe_session_id')->nullable();
+            $table->string('order_status')->default('Processing');
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ class Order extends Model
         'notes',
         'stripe_session_id',
         'user_id',
+        'order_status'
     ];
 
     public function orderItems(): HasMany

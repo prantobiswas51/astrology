@@ -124,6 +124,7 @@ class PaymentController extends Controller
         $order->user_id = Auth::id() ?? null;
         $order->total_amount = ($product->sale_price ?? $product->price) * $quantity;
         $order->stripe_session_id = $session->id;
+        $order->order_status = 'Unpaid';
         $order->status = 'Pending';
         $order->save();
 
@@ -174,6 +175,7 @@ class PaymentController extends Controller
             $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
             if ($order) {
                 $order->status = 'Paid';
+                $order->order_status = 'Processing';
                 $order->save();
             }
         }
@@ -193,6 +195,7 @@ class PaymentController extends Controller
             $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
             if ($order) {
                 $order->status = 'Failed';
+                $order->order_status = 'Failed';
                 $order->save();
             }
         }
