@@ -93,10 +93,10 @@ class PaymentController extends Controller
         $cell_number = $request->fields['fields[cell_number]'] ?? null;
         $insta_id = $request->fields['fields[insta_id]'] ?? null;
 
-        if($numberOfFiles){
+        if ($numberOfFiles) {
             $before_price = ($product->sale_price ?? $product->price);
             $final_price = $before_price * $numberOfFiles;
-        }else{
+        } else {
             $final_price = ($product->sale_price ?? $product->price);
         }
 
@@ -238,4 +238,6 @@ class PaymentController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+
+    
 }

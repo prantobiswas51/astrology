@@ -70,40 +70,44 @@
 
                             {{-- DIGITAL PRODUCT --}}
                             @if($item->product->type === 'digital')
-                                @if($order->status === 'Paid' && isset($extra['file_ids']))
-                                    @php
-                                    $files = $item->product->files->whereIn('id', $extra['file_ids']);
-                                    @endphp
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        @foreach($files as $file)
-                                        <a href="{{ asset($file->file_path) }}" download
-                                            class="inline-flex items-center px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-700 transition">
-                                            Download {{ $file->file_name }}
-                                        </a>
-                                        @endforeach
-                                    </div>
+                            @if($order->status === 'Paid' && isset($extra['file_ids']))
+                            @php
+                            $files = $item->product->files->whereIn('id', $extra['file_ids']);
+                            @endphp
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                @foreach($files as $file)
+                                @if($order->status === 'Paid')
+                                <a href="{{ route('file.download', $file->id) }}"
+                                    class="inline-flex items-center px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-700 transition">
+                                    Download {{ $file->file_name }}
+                                </a>
                                 @else
-                                    <p class="text-xs text-slate-500 mt-2">Download available after payment.</p>
+                                <p class="text-xs text-slate-500 mt-2">Download available after payment.</p>
                                 @endif
-
-                                {{-- NON-DIGITAL PRODUCT --}}
+                                @endforeach
+                            </div>
                             @else
-                                @if(!empty($extra))
-                                    <div class="mt-2 text-xs text-slate-600 space-y-1">
-                                        @foreach($extra as $key => $val)
-                                            @if($key === 'file_ids') @continue @endif
-                                                @php if (is_array($val)) { $val = implode(', ', $val); } @endphp
-                                            
-                                            @if(!empty($val))
-                                                <div>
-                                                    <strong>{{ ucfirst(str_replace('_', ' ', $key)) }}:</strong> {{ $val }}
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p class="text-xs text-slate-500 mt-2">No extra information</p>
+                            <p class="text-xs text-slate-500 mt-2">Download available after payment.</p>
+                            @endif
+
+                            {{-- NON-DIGITAL PRODUCT --}}
+                            @else
+                            @if(!empty($extra))
+                            <div class="mt-2 text-xs text-slate-600 space-y-1">
+                                @foreach($extra as $key => $val)
+                                @if($key === 'file_ids') @continue @endif
+                                @php if (is_array($val)) { $val = implode(', ', $val); } @endphp
+
+                                @if(!empty($val))
+                                <div>
+                                    <strong>{{ ucfirst(str_replace('_', ' ', $key)) }}:</strong> {{ $val }}
+                                </div>
                                 @endif
+                                @endforeach
+                            </div>
+                            @else
+                            <p class="text-xs text-slate-500 mt-2">No extra information</p>
+                            @endif
                             @endif
 
                         </div>

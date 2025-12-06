@@ -16,4 +16,9 @@ class ProductFile extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(\App\Models\OrderItem::class, 'product_id', 'product_id');
+    }
 }

@@ -10,11 +10,31 @@ class DashboardController extends Controller
 {
     public function index()
     {
-
         $orders = Order::with(['orderItems.product', 'orderItems.product.files'])
                    ->where('user_id', Auth::id())
                    ->get();
 
         return view('dashboard', compact('orders'));
+    }
+
+    public function downloadFile($id)
+    {
+        $file = \App\Models\ProductFile::findOrFail($id);
+
+        // Get the related order item and order
+        $orderItem = $file->orderItems()->first();
+        $order = $orderItem->order ?? null;
+
+        // Check if the current user is allowed
+        if (!$order || $order->user_id !== Auth::id()) {
+            abort(403, 'You do not have permission to download this file.');
+        }
+
+        if($order->status !== 'Paid') {
+            abort(403, 'You need to complete the payment to download this file.');
+        }
+
+        // Return download response
+        return response()->download(storage_path('app/' . $file->file_path), $file->file_name);
     }
 }
