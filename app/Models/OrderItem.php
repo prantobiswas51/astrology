@@ -19,10 +19,11 @@ class OrderItem extends Model
         'extra_information' => 'json',
     ];
 
-    public function order(): BelongsTo
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }
+
 
     public function product(): BelongsTo
     {

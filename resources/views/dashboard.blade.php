@@ -77,7 +77,7 @@
                             <div class="flex flex-wrap gap-2 mt-2">
                                 @foreach($files as $file)
                                 @if($order->status === 'Paid')
-                                <a href="{{ route('file.download', $file->id) }}"
+                                <a href="{{ route('file.download', [$file->id, $order->id]) }}"
                                     class="inline-flex items-center px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-700 transition">
                                     Download {{ $file->file_name }}
                                 </a>

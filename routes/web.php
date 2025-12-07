@@ -23,7 +23,7 @@ Route::post('/checkout/create', [PaymentController::class, 'createCheckout'])->n
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
-Route::get('/dashboard/download_file/{id}', [DashboardController::class, 'downloadFile'])->name('file.download');
+Route::get('/dashboard/download_file/{file}/{order}', [DashboardController::class, 'downloadFile'])->name('file.download');
 
 // Webhook (must be POST)
 Route::post('/stripe/webhook', [PaymentController::class, 'webhook'])->name('stripe.webhook');

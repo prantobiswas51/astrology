@@ -17,10 +17,11 @@ class Order extends Model
         'order_status'
     ];
 
-    public function orderItems(): HasMany
+    public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
+
 
     public function user()
     {

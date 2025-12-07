@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use Illuminate\Support\Facades\Storage;
+use App\Models\ProductFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -19,16 +20,16 @@ class DashboardController extends Controller
     }
 
 
-    public function downloadFile($id)
+    public function downloadFile($id, $order_id)
     {
-        $file = \App\Models\ProductFile::findOrFail($id);
+        $file = ProductFile::findOrFail($id);
+        $file_path = $file->file_path;
 
-        // Get the related order item and order
-        $orderItem = $file->orderItems()->first();
-        $order = $orderItem->order ?? null;
+        $order = Order::where('id', $order_id)->where('user_id', Auth::id())->firstOrFail();
+        $user = Auth::user();
 
-        if (!$order) {
-            abort(404, 'Order not found.');
+        if ($order->user_id !== $user->id) {
+            abort(403, 'You do not have permission to download this file.');
         }
 
         // Check if the order is paid
@@ -36,12 +37,7 @@ class DashboardController extends Controller
             abort(403, 'You need to complete the payment to download this file.');
         }
 
-        // Return download response
-        // dd('here');
-        $path = storage_path('app/' . $file->file_path);
-
-        $order->order_status = "Completed";
-        $order->save();
+        $path = storage_path('app/' . $file_path);
 
         return response()->download($path);
     }
