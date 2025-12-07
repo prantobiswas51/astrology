@@ -30,17 +30,13 @@ class DashboardController extends Controller
             abort(404, 'Order not found.');
         }
 
-        // Check if the current user is allowed
-        if ($order->user_id != Auth::id()) {
-            abort(403, 'You do not have permission to download this file.');
-        }
-
         // Check if the order is paid
         if ($order->status !== 'Paid') {
             abort(403, 'You need to complete the payment to download this file.');
         }
 
         // Return download response
-        return response()->download(storage_path('app/' . $file->file_path), $file->file_name);
+        // dd(asset('storage/app/' . $file->file_path), $file->file_name);
+        return response()->download((storage_path('app/' . $file->file_path)));
     }
 }

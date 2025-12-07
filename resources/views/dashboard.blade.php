@@ -130,7 +130,8 @@
                             <span class="w-2 h-2 mr-1.5 rounded-full
                                 @if($order->status === 'Pending') bg-amber-500
                                 @elseif($order->status === 'Failed') bg-red-500
-                                @else bg-green-500 @endif"></span>
+                                @else bg-green-500 @endif">
+                            </span>
                             {{ ucfirst($order->status) }}
                         </span>
                     </div>
