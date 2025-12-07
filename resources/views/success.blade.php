@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div class="min-h-screen flex flex-col justify-center items-center bg-gray-500">
         <div>
             <a href="/">
                 <x-application-logo class="w-20 h-20 fill-current text-gray-500" />

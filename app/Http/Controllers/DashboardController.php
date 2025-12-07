@@ -37,6 +37,6 @@ class DashboardController extends Controller
 
         // Return download response
         // dd(asset('storage/app/' . $file->file_path), $file->file_name);
-        return response()->download((storage_path('app/' . $file->file_path)));
+        return response()->download(asset('storage/app/' . $file->file_path), $file->file_name);
     }
 }
