@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +37,7 @@ class DashboardController extends Controller
         }
 
         // Return download response
-        dd(asset('storage/app/' . $file->file_path), $file->file_name);
+        // dd('here');
         return response()->download(asset('storage/app/' . $file->file_path));
     }
 }
