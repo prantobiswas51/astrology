@@ -26,7 +26,7 @@ class ProductfileForm
                         $name = pathinfo($original, PATHINFO_FILENAME);
                         $ext  = $file->getClientOriginalExtension();
 
-                        $folder = storage_path('app/product_files/uploads');
+                        $folder = asset('app/product_files/uploads');
                         $counter = 1;
 
                         $finalName = $original;
