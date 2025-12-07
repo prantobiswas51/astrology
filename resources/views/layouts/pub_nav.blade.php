@@ -56,8 +56,6 @@
                     <a class="p-2" href="{{ route('home') }}">Home</a>
                     <a class="p-2" href="{{ route('shop') }}">Shop</a>
                     <a class="p-2" href="{{ route('cart') }}">Cart</a>
-                    <a class="p-2" href="{{ route('home') }}">Privacy Policy</a>
-                    <a class="p-2" href="{{ route('home') }}">Terms & Conditions</a>
                 </div>
 
                 <!-- Dashboard (desktop only) -->
@@ -105,11 +103,8 @@
             <x-responsive-nav-link :href="route('cart')" :active="request()->routeIs('cart')">
                 {{ __('Cart') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('privacy_policy')" :active="request()->routeIs('privacy_policy')">
-                {{ __('Privacy Policy') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('terms_conditions')" :active="request()->routeIs('terms_conditions')">
-                {{ __('Terms & Conditions') }}
+            <x-responsive-nav-link :href="route('shop')" :active="request()->routeIs('shop')">
+                {{ __('Shop') }}
             </x-responsive-nav-link>
         </div>
 

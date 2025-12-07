@@ -39,6 +39,10 @@ class DashboardController extends Controller
         // Return download response
         // dd('here');
         $path = storage_path('app/' . $file->file_path);
+
+        $order->order_status = "Completed";
+        $order->save();
+
         return response()->download($path);
     }
 }
