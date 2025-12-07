@@ -7,7 +7,7 @@
                 <div class="border rounded-lg p-4 shadow bg-sky-100">
                     <img src="{{ asset('storage/' . $product->image1_path) }}" alt="{{ $product->name }}" class="w-full h-auto max-h-[260px] object-cover mb-4">
                     <h2 class="text-xl font-semibold mb-2">{{ $product->name }}</h2>
-                    <p class="text-gray-700 mb-4">${{ number_format($product->price, 2) }}</p>
+                    <p class="text-gray-700 mb-4">${{ number_format($product->sale_price ?? $product->price, 2) }}</p>
                     <a href="{{ route('product_view', $product->slug) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View Product</a>
                 </div>
             @endforeach
