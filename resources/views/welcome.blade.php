@@ -69,7 +69,7 @@
                         mistake? Find out in your sign’s guide.</p>
                     <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $30</h2>
                     <h2 class="py-2">Ready To Download</h2>
-                    <a href="{{ route('view_product', ['slug' => 'love-and-obsession']) }}"><button
+                    <a href="{{ route('product_view', ['slug' => 'love-and-obsession']) }}"><button
                             class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
                             Now</button></a>
                 </div>
@@ -82,7 +82,7 @@
                         mistake? Find out in your sign’s guide.</p>
                     <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $50</h2>
                     <h2 class="py-2">Ready To Download</h2>
-                    <a href="{{ route('view_product', ['slug' => 'love-and-obsession-zodiac-compatibility-bundle']) }}"> <button
+                    <a href="{{ route('product_view', ['slug' => 'love-and-obsession-zodiac-compatibility-bundle']) }}"> <button
                             class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
                             Now</button></a>
                 </div>
