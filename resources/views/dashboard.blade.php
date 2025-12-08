@@ -33,7 +33,7 @@
                     {{-- Total + Type Badge --}}
                     <div class="flex justify-between items-end mb-4">
                         <div>
-                            <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total</p>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total T</p>
                             <span class="text-2xl font-bold text-emerald-600">${{ $order->total_amount }}</span>
                         </div>
 
