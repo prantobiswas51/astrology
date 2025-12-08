@@ -291,7 +291,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::YSKu2tBWLtZBoPgn',
+            '_route' => 'generated::YtlRggyaUHwyp4yV',
           ),
           1 => NULL,
           2 => 
@@ -311,7 +311,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::JtYJHj7RfJDRJj5s',
+            '_route' => 'generated::g8ePTYBS225Y2Y0c',
           ),
           1 => NULL,
           2 => 
@@ -350,7 +350,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::w3Zbr7I3EkIQGz7k',
+            '_route' => 'generated::mXJzCrrvoNbknvYi',
           ),
           1 => NULL,
           2 => 
@@ -677,7 +677,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::sHBuwyHsNhPZW3v4',
+            '_route' => 'generated::Qn3MYxqAFev6eITQ',
           ),
           1 => NULL,
           2 => 
@@ -713,7 +713,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::VloiJ1g1tXobQi6P',
+            '_route' => 'generated::XSHbp1lPMDOUmV7E',
           ),
           1 => NULL,
           2 => 
@@ -843,7 +843,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::4lg9xKRFEFUcw0uz',
+            '_route' => 'generated::y2lIBGYS5azQOQhW',
           ),
           1 => NULL,
           2 => 
@@ -2274,7 +2274,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::YSKu2tBWLtZBoPgn' => 
+    'generated::YtlRggyaUHwyp4yV' => 
     array (
       'methods' => 
       array (
@@ -2286,7 +2286,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::YSKu2tBWLtZBoPgn',
+        'as' => 'generated::YtlRggyaUHwyp4yV',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2302,7 +2302,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::JtYJHj7RfJDRJj5s' => 
+    'generated::g8ePTYBS225Y2Y0c' => 
     array (
       'methods' => 
       array (
@@ -2314,7 +2314,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::JtYJHj7RfJDRJj5s',
+        'as' => 'generated::g8ePTYBS225Y2Y0c',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2385,7 +2385,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::w3Zbr7I3EkIQGz7k' => 
+    'generated::mXJzCrrvoNbknvYi' => 
     array (
       'methods' => 
       array (
@@ -2413,8 +2413,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'/home/pranto/Code/Laravel/astrology/vendor/laravel/framework/src/Illuminate/Foundation/Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"0000000000000d540000000000000000";}}',
-        'as' => 'generated::w3Zbr7I3EkIQGz7k',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"0000000000000cda0000000000000000";}}',
+        'as' => 'generated::mXJzCrrvoNbknvYi',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3172,7 +3172,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::sHBuwyHsNhPZW3v4' => 
+    'generated::Qn3MYxqAFev6eITQ' => 
     array (
       'methods' => 
       array (
@@ -3193,7 +3193,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::sHBuwyHsNhPZW3v4',
+        'as' => 'generated::Qn3MYxqAFev6eITQ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3247,7 +3247,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::VloiJ1g1tXobQi6P' => 
+    'generated::XSHbp1lPMDOUmV7E' => 
     array (
       'methods' => 
       array (
@@ -3268,7 +3268,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::VloiJ1g1tXobQi6P',
+        'as' => 'generated::XSHbp1lPMDOUmV7E',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3588,7 +3588,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::4lg9xKRFEFUcw0uz' => 
+    'generated::y2lIBGYS5azQOQhW' => 
     array (
       'methods' => 
       array (
@@ -3609,7 +3609,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::4lg9xKRFEFUcw0uz',
+        'as' => 'generated::y2lIBGYS5azQOQhW',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3715,7 +3715,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000d660000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000cec0000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,
