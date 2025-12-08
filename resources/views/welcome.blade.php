@@ -57,7 +57,7 @@
                     <h2 class="py-2">Ready To Download</h2>
                     <a href="{{ route('product_view', ['slug' => 'zodiac-compatibility-e-books']) }}">
                         <button
-                            class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
+                            class="mt-auto w-full bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
                             Now</button></a>
                 </div>
 
@@ -70,7 +70,7 @@
                     <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $30</h2>
                     <h2 class="py-2">Ready To Download</h2>
                     <a href="{{ route('product_view', ['slug' => 'love-and-obsession']) }}"><button
-                            class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
+                            class="mt-auto w-full bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
                             Now</button></a>
                 </div>
 
@@ -83,7 +83,7 @@
                     <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $50</h2>
                     <h2 class="py-2">Ready To Download</h2>
                     <a href="{{ route('product_view', ['slug' => 'love-and-obsession-zodiac-compatibility-bundle']) }}"> <button
-                            class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
+                            class="mt-auto w-full bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
                             Now</button></a>
                 </div>
             </div>
@@ -94,7 +94,6 @@
 
         <section class="simple_readings ">
             <h2 class="text-2xl font-bold text-center text-gray-100 my-6">Simple Readings</h2>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 pb-6">
 
 
@@ -134,8 +133,6 @@
 
                 {{-- COPY-PASTE ABOVE FOR MORE ITEMS --}}
             </div>
-
-
         </section>
 
 

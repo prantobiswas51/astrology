@@ -55,7 +55,6 @@
                 <div class="p-2 nav-link flex items-center space-x-4">
                     <a class="p-2" href="{{ route('home') }}">Home</a>
                     <a class="p-2" href="{{ route('shop') }}">Shop</a>
-                    <a class="p-2" href="{{ route('cart') }}">Cart</a>
                 </div>
 
                 <!-- Dashboard (desktop only) -->
@@ -111,9 +110,7 @@
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Home') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('cart')" :active="request()->routeIs('cart')">
-                {{ __('Cart') }}
-            </x-responsive-nav-link>
+
             <x-responsive-nav-link :href="route('shop')" :active="request()->routeIs('shop')">
                 {{ __('Shop') }}
             </x-responsive-nav-link>
