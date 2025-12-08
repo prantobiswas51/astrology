@@ -15,6 +15,8 @@ class SettingForm
                     ->label('Stripe API Key'),
                 TextInput::make('endpoint_secret')
                     ->label('Endpoint Secret'),
+                TextInput::make('maileroo_api_key')
+                    ->label('Maileroo API Key'),
             ]);
     }
 }

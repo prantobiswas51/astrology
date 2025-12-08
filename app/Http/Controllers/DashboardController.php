@@ -22,11 +22,14 @@ class DashboardController extends Controller
 
     public function downloadFile($id, $order_id)
     {
+
+        // return $id;
         $file = ProductFile::findOrFail($id);
         $file_path = $file->file_path;
 
         $order = Order::where('id', $order_id)->where('user_id', Auth::id())->firstOrFail();
         $user = Auth::user();
+
 
         if ($order->user_id !== $user->id) {
             abort(403, 'You do not have permission to download this file.');
@@ -38,6 +41,12 @@ class DashboardController extends Controller
         }
 
         $path = storage_path('app/' . $file_path);
+
+        // update order status to completed if not already
+        if ($order->status !== 'Completed') {
+            $order->status = 'Completed';
+            $order->save();
+        }
 
         return response()->download($path);
     }

@@ -11,6 +11,7 @@
             <p class="text-gray-700 text-center">Thank you for your purchase. Your transaction has been completed successfully.</p>
             <div class="mt-6 text-center">
                 <a href="/" class="text-blue-500 hover:underline">Return to Home</a>
+                <a href="{{ route('dashboard') }}" class="text-blue-500 hover:underline">Go to Dashboard</a>
             </div>
         </div>
     </div>

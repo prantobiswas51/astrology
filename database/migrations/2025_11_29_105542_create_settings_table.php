@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('stripe_api_key')->nullable();
             $table->string('endpoint_secret')->nullable();
+            $table->string('maileroo_api_key')->nullable();
             $table->timestamps();
         });
     }
