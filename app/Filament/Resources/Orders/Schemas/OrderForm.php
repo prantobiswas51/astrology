@@ -32,6 +32,7 @@ class OrderForm
                     ->required()
                     ->default('Pending'),
                 Select::make('order_status')->options([
+                    'Unpaid' => 'Unpaid',
                     'Processing' => 'Processing',
                     'Completed' => 'Completed',
                     'Canceled' => 'Canceled',

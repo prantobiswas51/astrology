@@ -6,6 +6,7 @@ use Stripe\Stripe;
 use Stripe\Webhook;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\ProductFile;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
@@ -169,16 +170,59 @@ class PaymentController extends Controller
 
         $session = Session::retrieve($request->session_id);
 
-        if ($session->payment_status === 'paid') {
-            Log::info("Status Paid");
+        // if ($session->payment_status === 'paid') {
+        //     Log::info("Status Paid");
 
-            $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
-            if ($order) {
-                $order->status = 'Paid';
-                $order->order_status = 'Processing';
-                $order->save();
-            }
-        }
+        //     $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
+        //     if ($order) {
+        //         $order->status = 'Paid';
+        //         $order->order_status = 'Processing';
+        //         $order->save();
+        //     }
+
+        //     if ($order->type == 'digital') {
+
+        //         // Collect all file IDs from order items
+        //         $fileIds = [];
+
+        //         foreach ($order->orderItems as $item) {
+
+        //             if (empty($item->extra_information)) {
+        //                 continue;
+        //             }
+
+        //             $extra = json_decode($item->extra_information, true);
+
+        //             // Single file
+        //             if (isset($extra['file_id'])) {
+        //                 $fileIds[] = $extra['file_id'];
+        //             }
+
+        //             // Multiple files
+        //             if (isset($extra['files']) && is_array($extra['files'])) {
+        //                 $fileIds = array_merge($fileIds, $extra['files']);
+        //             }
+        //         }
+
+        //         // Fetch files from DB (adjust model name if different)
+        //         $files = ProductFile::whereIn('id', $fileIds)->get();
+
+        //         // Convert file paths to full storage paths
+        //         $attachmentPaths = [];
+        //         foreach ($files as $file) {
+        //             $attachmentPaths[] = storage_path('app/' . $file->path);
+        //         }
+
+        //         $html = view('emails.digital_order_files', ['files' => $files, 'order' => $order])->render();
+
+        //         // Send email with file attachments
+        //         sendCustomMail(
+        //             $order->email,
+        //             'Your Digital Order Files - AstrologybyMari',
+        //             $html, $attachmentPaths
+        //         );
+        //     }
+        // }
 
         return view('success', ['session' => $session]);
     }
@@ -238,6 +282,4 @@ class PaymentController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
-
-    
 }

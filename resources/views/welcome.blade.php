@@ -55,35 +55,36 @@
                         mistake? Find out in your sign’s guide.</p>
                     <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $30</h2>
                     <h2 class="py-2">Ready To Download</h2>
-                    <button
-                        class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
-                        Now</button>
+                    <a href="{{ route('view_product', ['slug' => 'zodiac-compatibility-e-books']) }}">
+                        <button
+                            class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
+                            Now</button></a>
                 </div>
 
                 {{-- Product Item --}}
                 <div
                     class="product_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
-                    <h3 class="text-xl font-semibold mb-2">Your Zodiac Sign Compatibility E-Book</h3>
+                    <h3 class="text-xl font-semibold mb-2">How to make them Obsessed Using Astrology E-Book</h3>
                     <p class="text-sky-600 drop-shadow text-md font-semibold mb-4">Who’s your soulmate—and who’s your
                         mistake? Find out in your sign’s guide.</p>
                     <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $30</h2>
                     <h2 class="py-2">Ready To Download</h2>
-                    <button
-                        class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
-                        Now</button>
+                    <a href="{{ route('view_product', ['slug' => 'love-and-obsession']) }}"><button
+                            class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
+                            Now</button></a>
                 </div>
 
                 {{-- Product Item --}}
                 <div
                     class="product_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
-                    <h3 class="text-xl font-semibold mb-2">Your Zodiac Sign Compatibility E-Book</h3>
+                    <h3 class="text-xl font-semibold mb-2">The Love & Obsession and Zodiac Compatibility Bundle</h3>
                     <p class="text-sky-600 drop-shadow text-md font-semibold mb-4">Who’s your soulmate—and who’s your
                         mistake? Find out in your sign’s guide.</p>
-                    <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $30</h2>
+                    <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $50</h2>
                     <h2 class="py-2">Ready To Download</h2>
-                    <button
-                        class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
-                        Now</button>
+                    <a href="{{ route('view_product', ['slug' => 'love-and-obsession-zodiac-compatibility-bundle']) }}"> <button
+                            class="mt-auto bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
+                            Now</button></a>
                 </div>
             </div>
 
@@ -103,7 +104,8 @@
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
-                        <img src="{{ asset('storage/products/images/01KBDG1S0TMSVQA5W6YTPKG54X.jpg') }}" alt="Product Image"
+                        <img src="{{ asset('storage/products/images/01KBDG1S0TMSVQA5W6YTPKG54X.jpg') }}"
+                            alt="Product Image"
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
@@ -126,6 +128,8 @@
                     </a>
 
                 </div>
+
+
 
 
                 {{-- COPY-PASTE ABOVE FOR MORE ITEMS --}}
