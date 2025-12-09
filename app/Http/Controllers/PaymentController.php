@@ -215,7 +215,16 @@ class PaymentController extends Controller
             // Convert file paths to full storage paths
             $attachmentPaths = [];
             foreach ($files as $file) {
-                $attachmentPaths[] = storage_path('app/' . $file->path);
+                $fullPath = storage_path('app/public/' . $file->file_path);
+                if (file_exists($fullPath) && is_file($fullPath)) {
+                    $attachmentPaths[] = $fullPath;
+                } else {
+                    Log::warning('Digital product file not found or is directory', [
+                        'file_id' => $file->id,
+                        'file_path' => $file->file_path,
+                        'full_path' => $fullPath,
+                    ]);
+                }
             }
 
             $html = view('emails.digital_order_files', ['files' => $files, 'order' => $order])->render();

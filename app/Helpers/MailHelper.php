@@ -41,6 +41,11 @@ if (!function_exists('sendCustomMail')) {
                     continue;
                 }
 
+                if (!is_file($filePath)) {
+                    Log::warning("Attachment path is not a file: {$filePath}");
+                    continue;
+                }
+
                 $fileName = basename($filePath);
                 $fileContent = file_get_contents($filePath);
                 $base64Content = base64_encode($fileContent);
