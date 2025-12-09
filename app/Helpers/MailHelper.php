@@ -33,6 +33,8 @@ if (!function_exists('sendCustomMail')) {
 
         // Add attachments if provided
         if (!empty($attachmentPaths)) {
+            Log::info('Processing attachments', ['count' => count($attachmentPaths), 'paths' => $attachmentPaths]);
+            
             $attachments = [];
             
             foreach ($attachmentPaths as $filePath) {
@@ -48,10 +50,18 @@ if (!function_exists('sendCustomMail')) {
 
                 $fileName = basename($filePath);
                 $fileContent = file_get_contents($filePath);
+                $fileSize = strlen($fileContent);
                 $base64Content = base64_encode($fileContent);
                 
                 // Determine MIME type
                 $mimeType = mime_content_type($filePath) ?: 'application/octet-stream';
+                
+                Log::info('Attaching file', [
+                    'file_name' => $fileName,
+                    'mime_type' => $mimeType,
+                    'size_bytes' => $fileSize,
+                    'base64_length' => strlen($base64Content),
+                ]);
                 
                 $attachments[] = [
                     'file_name' => $fileName,
@@ -63,7 +73,12 @@ if (!function_exists('sendCustomMail')) {
             
             if (!empty($attachments)) {
                 $payload['attachments'] = $attachments;
+                Log::info('Added attachments to payload', ['count' => count($attachments)]);
+            } else {
+                Log::warning('No valid attachments to add');
             }
+        } else {
+            Log::info('No attachment paths provided');
         }
 
         $response = Http::withHeaders([

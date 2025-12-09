@@ -20,17 +20,18 @@ class OrdersTable
                     // LEFT SIDE
                     Stack::make([
                         TextColumn::make('email')
-                            ->label('Email address')
+                            ->label('Email address')->searchable()
                             ->searchable(),
 
                         TextColumn::make('user.name')
-                            ->label('Username')
+                            ->label('Username')->searchable()
                             ->sortable()
                             ->formatStateUsing(fn($state, $record) => $record->user?->name ?? 'Guest'),
                         
                         TextColumn::make('id')
                             ->label('Order ID')
                             ->prefix('#')
+                            ->searchable()
                             ->sortable(),
 
                         TextColumn::make('created_at')

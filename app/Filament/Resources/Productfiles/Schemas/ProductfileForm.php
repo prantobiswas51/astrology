@@ -21,7 +21,7 @@ class ProductfileForm
                 TextInput::make('file_name')
                     ->required(),
                 FileUpload::make('file_path')
-                    ->disk('local')   // ← THIS FIXES THE PRIVATE FOLDER ISSUE
+                    ->disk('public')
                     ->directory('product_files/uploads')
                     ->getUploadedFileNameForStorageUsing(function ($file) {
 
@@ -30,7 +30,7 @@ class ProductfileForm
                         $ext  = $file->getClientOriginalExtension();
 
                         // Correct actual folder path
-                        $folder = Storage::disk('local')->path('product_files/uploads');
+                        $folder = Storage::disk('public')->path('product_files/uploads');
 
                         $counter = 1;
                         $finalName = $original;

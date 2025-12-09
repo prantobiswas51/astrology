@@ -40,7 +40,7 @@ class DashboardController extends Controller
             abort(403, 'You need to complete the payment to download this file.');
         }
 
-        $path = storage_path('app/' . $file_path);
+        $path = storage_path('app/public/' . $file_path);
 
         // update order status to completed if not already
         if ($order->status !== 'Completed') {
