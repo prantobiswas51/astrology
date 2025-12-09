@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
-use App\Models\ProductFile;
 use App\Models\Setting;
+use App\Models\ProductFile;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Log;
@@ -170,59 +171,65 @@ class PaymentController extends Controller
 
         $session = Session::retrieve($request->session_id);
 
-        // if ($session->payment_status === 'paid') {
-        //     Log::info("Status Paid");
+        Log::info("Status Paid");
 
-        //     $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
-        //     if ($order) {
-        //         $order->status = 'Paid';
-        //         $order->order_status = 'Processing';
-        //         $order->save();
-        //     }
+        $order = \App\Models\Order::where('stripe_session_id', $session->id)->with('user', 'orderItems.product')->first();
+        if ($order) {
+            $order->status = 'Paid';
+            $order->order_status = 'Processing';
+            $order->save();
+        }
 
-        //     if ($order->type == 'digital') {
+        // Check if any order item is a digital product
+        $hasDigitalProduct = false;
+        foreach ($order->orderItems as $item) {
+            if ($item->product && $item->product->type == 'digital') {
+                $hasDigitalProduct = true;
+                break;
+            }
+        }
 
-        //         // Collect all file IDs from order items
-        //         $fileIds = [];
+        // DIGITAL PRODUCT EMAIL HANDLING
+        if ($hasDigitalProduct) {
 
-        //         foreach ($order->orderItems as $item) {
+            // Collect all file IDs from order items
+            $fileIds = [];
 
-        //             if (empty($item->extra_information)) {
-        //                 continue;
-        //             }
+            foreach ($order->orderItems as $item) {
 
-        //             $extra = json_decode($item->extra_information, true);
+                if (empty($item->extra_information)) {
+                    continue;
+                }
 
-        //             // Single file
-        //             if (isset($extra['file_id'])) {
-        //                 $fileIds[] = $extra['file_id'];
-        //             }
+                $extra = json_decode($item->extra_information, true);
 
-        //             // Multiple files
-        //             if (isset($extra['files']) && is_array($extra['files'])) {
-        //                 $fileIds = array_merge($fileIds, $extra['files']);
-        //             }
-        //         }
+                // Multiple files (stored as file_ids)
+                if (isset($extra['file_ids']) && is_array($extra['file_ids'])) {
+                    $fileIds = array_merge($fileIds, $extra['file_ids']);
+                }
+            }
 
-        //         // Fetch files from DB (adjust model name if different)
-        //         $files = ProductFile::whereIn('id', $fileIds)->get();
+            // Fetch files from DB (adjust model name if different)
+            $files = ProductFile::whereIn('id', $fileIds)->get();
 
-        //         // Convert file paths to full storage paths
-        //         $attachmentPaths = [];
-        //         foreach ($files as $file) {
-        //             $attachmentPaths[] = storage_path('app/' . $file->path);
-        //         }
+            // Convert file paths to full storage paths
+            $attachmentPaths = [];
+            foreach ($files as $file) {
+                $attachmentPaths[] = storage_path('app/' . $file->path);
+            }
 
-        //         $html = view('emails.digital_order_files', ['files' => $files, 'order' => $order])->render();
+            $html = view('emails.digital_order_files', ['files' => $files, 'order' => $order])->render();
 
-        //         // Send email with file attachments
-        //         sendCustomMail(
-        //             $order->email,
-        //             'Your Digital Order Files - AstrologybyMari',
-        //             $html, $attachmentPaths
-        //         );
-        //     }
-        // }
+            // Send email with file attachments
+            sendCustomMail(
+                $order->email,
+                'Your Digital Order Files - AstrologybyMari',
+                $html,
+                $order->user->name ?? 'Customer',
+                $attachmentPaths
+            );
+        }
+
 
         return view('success', ['session' => $session]);
     }
