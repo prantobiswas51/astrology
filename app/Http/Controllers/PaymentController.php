@@ -95,6 +95,12 @@ class PaymentController extends Controller
         $cell_number = $request->fields['fields[cell_number]'] ?? null;
         $insta_id = $request->fields['fields[insta_id]'] ?? null;
 
+        $p_dob = $request->fields['fields[p_dob]'] ?? null;
+        $p_tob = $request->fields['fields[p_tob]'] ?? null;
+        $p_pob = $request->fields['fields[p_pob]'] ?? null;
+        $p_gender = $request->fields['fields[p_gender]'] ?? null;
+        $p_name_zodiac = $request->fields['fields[p_name_zodiac]'] ?? null;
+
         if ($numberOfFiles) {
             $before_price = ($product->sale_price ?? $product->price);
             $final_price = $before_price * $numberOfFiles;
@@ -149,6 +155,11 @@ class PaymentController extends Controller
             'cell_number' => $cell_number,
             'insta_id' => $insta_id,
             'file_ids' => $selectedFiles,
+            'p_dob' => $p_dob,
+            'p_tob' => $p_tob,
+            'p_pob' => $p_pob,
+            'p_gender' => $p_gender,
+            'p_name_zodiac' => $p_name_zodiac,
         ];
 
         // Remove all null or empty values
@@ -171,16 +182,22 @@ class PaymentController extends Controller
 
         $session = Session::retrieve($request->session_id);
 
-        Log::info("Status Paid");
+        Log::info("Success page loaded for session: " . $session->id);
 
-        $order = \App\Models\Order::where('stripe_session_id', $session->id)->with('user', 'orderItems.product')->first();
-        if ($order) {
-            $order->status = 'Paid';
-            $order->order_status = 'Processing';
-            $order->save();
+        // Fetch order (status already updated by webhook)
+        $order = Order::where('stripe_session_id', $session->id)
+            ->with('user', 'orderItems.product')
+            ->first();
+
+        if (!$order) {
+            Log::error("Order not found on success page", [
+                'session_id' => $session->id
+            ]);
+
+            return view('success', ['session' => $session]);
         }
 
-        // Check if any order item is a digital product
+        // Check if any order item is a digital product  
         $hasDigitalProduct = false;
         foreach ($order->orderItems as $item) {
             if ($item->product && $item->product->type == 'digital') {
@@ -189,47 +206,44 @@ class PaymentController extends Controller
             }
         }
 
-        // DIGITAL PRODUCT EMAIL HANDLING
+        // DIGITAL PRODUCT EMAIL HANDLING (kept same)
         if ($hasDigitalProduct) {
 
-            // Collect all file IDs from order items
+            // Collect file IDs
             $fileIds = [];
 
             foreach ($order->orderItems as $item) {
-
-                if (empty($item->extra_information)) {
-                    continue;
-                }
+                if (empty($item->extra_information)) continue;
 
                 $extra = json_decode($item->extra_information, true);
 
-                // Multiple files (stored as file_ids)
                 if (isset($extra['file_ids']) && is_array($extra['file_ids'])) {
                     $fileIds = array_merge($fileIds, $extra['file_ids']);
                 }
             }
 
-            // Fetch files from DB (adjust model name if different)
             $files = ProductFile::whereIn('id', $fileIds)->get();
 
-            // Convert file paths to full storage paths
             $attachmentPaths = [];
             foreach ($files as $file) {
                 $fullPath = storage_path('app/public/' . $file->file_path);
-                if (file_exists($fullPath) && is_file($fullPath)) {
+
+                if (file_exists($fullPath)) {
                     $attachmentPaths[] = $fullPath;
                 } else {
-                    Log::warning('Digital product file not found or is directory', [
+                    Log::warning('Digital product file missing', [
                         'file_id' => $file->id,
-                        'file_path' => $file->file_path,
-                        'full_path' => $fullPath,
+                        'path' => $fullPath
                     ]);
                 }
             }
 
-            $html = view('emails.digital_order_files', ['files' => $files, 'order' => $order])->render();
+            $html = view('emails.digital_order_files', [
+                'files' => $files,
+                'order' => $order
+            ])->render();
 
-            // Send email with file attachments
+            // Send email (unchanged)
             sendCustomMail(
                 $order->email,
                 'Your Digital Order Files - AstrologybyMari',
@@ -239,29 +253,29 @@ class PaymentController extends Controller
             );
         }
 
-
         return view('success', ['session' => $session]);
     }
+
 
     public function cancel(Request $request)
     {
         Stripe::setApiKey($this->stripe_api_key);
 
-        $session = Session::retrieve($request->session_id);
+        $session = null;
 
-        if ($session->payment_status === 'failed') {
-            Log::info("Status Paid");
-
-            $order = \App\Models\Order::where('stripe_session_id', $session->id)->first();
-            if ($order) {
-                $order->status = 'Failed';
-                $order->order_status = 'Failed';
-                $order->save();
-            }
+        if ($request->session_id) {
+            $session = Session::retrieve($request->session_id);
         }
 
-        return view('success', ['session' => $session]);
+        Log::info("Cancel page loaded", [
+            'session_id' => $request->session_id ?? null
+        ]);
+
+        // Do NOT update order here — webhook handles failures correctly
+
+        return view('cancel', ['session' => $session]);
     }
+
 
     public function webhook(Request $request)
     {
@@ -270,6 +284,7 @@ class PaymentController extends Controller
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
         $endpoint_secret = $this->endpoint_secret;
+
         try {
             $event = Webhook::constructEvent(
                 $payload,
@@ -277,19 +292,34 @@ class PaymentController extends Controller
                 $endpoint_secret
             );
 
-            // Handle the event
             switch ($event->type) {
+
                 case 'checkout.session.completed':
                     $session = $event->data->object;
-                    // Payment was successful
-                    // You can update order in DB here
-                    Log::info('Stripe Checkout Session created', ['session_id' => $session->id]);
+
+                    Log::info('Stripe Checkout Session completed', ['session_id' => $session->id]);
+
+                    // 🔥 MOVE ORDER UPDATE HERE
+                    $order = Order::where('stripe_session_id', $session->id)->first();
+
+                    if ($order) {
+                        // update only payment status — SAFE
+                        $order->status = 'Paid';
+                        $order->order_status = 'Processing';
+                        $order->save();
+
+                        Log::info('Order marked as Paid in webhook', ['order_id' => $order->id]);
+                    } else {
+                        Log::error('Order not found for session in webhook', ['session_id' => $session->id]);
+                    }
                     break;
 
                 case 'payment_intent.payment_failed':
                     $paymentIntent = $event->data->object;
-                    // Payment failed
-                    Log::error('Stripe Payment Intent failed', ['payment_intent_id' => $paymentIntent->id]);
+
+                    Log::error('Stripe Payment Intent failed', [
+                        'payment_intent_id' => $paymentIntent->id
+                    ]);
                     break;
             }
 

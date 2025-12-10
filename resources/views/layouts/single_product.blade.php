@@ -180,10 +180,10 @@
                 </div>
 
                 <!-- Extra Details -->
-                <div class="mt-10">
+                {{-- <div class="mt-10">
                     <h3 class="text-xl font-semibold mb-3">Product Description</h3>
                     <p class="text-gray-700 leading-relaxed"> {{ $product->description }} </p>
-                </div>
+                </div> --}}
 
             </div>
         </div>

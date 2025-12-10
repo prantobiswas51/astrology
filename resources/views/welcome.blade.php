@@ -99,6 +99,7 @@
 
 
                 {{-- Loop this item --}}
+                {{-- Birth Chart reading here --}}
                 <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
@@ -128,7 +129,95 @@
 
                 </div>
 
+                {{-- Birth Chart reading and phone call here --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
+                    <div class="flex">
+                        <img src="{{ asset('storage/products/images/01KBDG1S0TMSVQA5W6YTPKG54X.jpg') }}"
+                            alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Birth Chart Reading and Phone</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Get insights into your love life and relationships with this focused reading.
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$35</del> <span class="text-gray-800">$30</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'birthchart-reading-and-phone-call']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+                {{-- Birth Chart reading Compatibility here --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('storage/products/images/01KBDG1S0TMSVQA5W6YTPKG54X.jpg') }}"
+                            alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Birth Chart Compatibility Reading</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Get insights into your love life and relationships with this focused reading.
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$70</del> <span class="text-gray-800">$60</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'birth-chart-compatibility-reading']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+                {{-- Video Response reading --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('storage/products/images/01KBZMA7F276ZVRGNHT3AAGNXD.jpg') }}"
+                            alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Video Response Reading</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Get insights into your love life and relationships with this focused reading.
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$35</del> <span class="text-gray-800">$30</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'astro-video-response']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
 
 
                 {{-- COPY-PASTE ABOVE FOR MORE ITEMS --}}
