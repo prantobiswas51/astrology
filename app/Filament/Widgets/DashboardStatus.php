@@ -13,12 +13,16 @@ class DashboardStatus extends StatsOverviewWidget
         $pending_orders = \App\Models\Order::where('status', 'Pending')->count();
         $payment_unpaid = \App\Models\Order::where('order_status', 'Unpaid')->count();
         $total_sales = \App\Models\Order::where('status', 'Paid')->sum('total_amount');
+        $failed_status = \App\Models\Order::where('status', 'Cancelled')->count();
+        $failed_payments = \App\Models\Order::where('order_status', 'Cancelled')->count();
 
         return [
             Stat::make('Pending Orders', $pending_orders),
             Stat::make('Unpaid Payments', $payment_unpaid), 
-            Stat::make('Total Users', $users),
             Stat::make('Total Sales', '$' . number_format($total_sales, 2)),
+            Stat::make('Failed Orders', $failed_status),
+            Stat::make('Failed Payments', $failed_payments),
+            Stat::make('Total Users', $users),
         ];
     }
 }
