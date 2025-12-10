@@ -21,10 +21,11 @@
     {{-- client design --}}
     @include('layouts.pub_nav')
 
-    <div class="max-w-7xl mx-auto ">
+    <div class="max-w-7xl mx-auto mb-20">
         {{ $slot }}
     </div>
 
+    @include('layouts.footer')
 </body>
 
 </html>

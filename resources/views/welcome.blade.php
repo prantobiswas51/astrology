@@ -1,12 +1,12 @@
 <x-guest-layout>
     <div class=" pb-6 min-h-screen mx-auto">
         {{-- Navigation links --}}
-        <section class="nav_tag gap-2 w-full flex justify-between bg-gray-200 p-2 rounded">
+        {{-- <section class="nav_tag gap-2 w-full flex justify-between bg-gray-200 p-2 rounded">
             <a href="#birthchart" class="underline">&#8595;Birth Chart</a>
             <a href="#video_response" class="underline">&#8595;Video Response</a>
             <a href="#phone_call" class="underline">&#8595;Phone Call</a>
             <a href="#travel_chart" class="underline">&#8595;Travel Chart</a>
-        </section>
+        </section> --}}
 
         {{-- Hero Section --}}
 
@@ -37,6 +37,8 @@
             <h3 class="text-xl text-center font-semibold my-2">Instant e-books + chart guides are finally here.</h3>
             <button class="bg-gray-900 text-white p-2 mt-6 rounded-lg px-5">Get your done for you readings here! No
                 waiting!</button>
+            <p class="text-center text-lg mt-3">All sales are final!</p>
+
         </section>
 
         {{-- pdf products --}}
@@ -82,7 +84,8 @@
                         mistake? Find out in your sign’s guide.</p>
                     <h2 class="text-2xl font-extrabold drop-shadow text-sky-800">#E-Book - $50</h2>
                     <h2 class="py-2">Ready To Download</h2>
-                    <a href="{{ route('product_view', ['slug' => 'love-and-obsession-zodiac-compatibility-bundle']) }}"> <button
+                    <a href="{{ route('product_view', ['slug' => 'love-and-obsession-zodiac-compatibility-bundle']) }}">
+                        <button
                             class="mt-auto w-full bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors">Download
                             Now</button></a>
                 </div>

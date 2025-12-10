@@ -66,7 +66,16 @@
                         <form action="" method="post">
                             @csrf
                             <button formaction="{{ route('logout') }}"
-                                class="px-4 py-2 rounded-lg font-medium hover:underline">Logout</button>
+                                class="px-4 py-2 rounded-lg font-medium hover:underline">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2" />
+                                </svg>
+
+                            </button>
                         </form>
                     </div>
                     @else
@@ -93,18 +102,18 @@
     <!-- Responsive Navigation Menu -->
     <div id="responsive-menu" class="hidden">
         <div class="pt-2 pb-3 space-y-1">
-            
+
             @auth
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
             @else
-                <x-responsive-nav-link :href="route('register')" :active="request()->routeIs('register')">
-                    {{ __('Register') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
-                    {{ __('Login') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('register')" :active="request()->routeIs('register')">
+                {{ __('Register') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                {{ __('Login') }}
+            </x-responsive-nav-link>
             @endauth
 
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
