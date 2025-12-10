@@ -18,8 +18,7 @@
     'app.filament.resources.settings.pages.edit-setting' => 'App\\Filament\\Resources\\Settings\\Pages\\EditSetting',
     'app.filament.resources.settings.pages.list-settings' => 'App\\Filament\\Resources\\Settings\\Pages\\ListSettings',
     'filament.pages.dashboard' => 'Filament\\Pages\\Dashboard',
-    'filament.widgets.account-widget' => 'Filament\\Widgets\\AccountWidget',
-    'filament.widgets.filament-info-widget' => 'Filament\\Widgets\\FilamentInfoWidget',
+    'app.filament.widgets.dashboard-status' => 'App\\Filament\\Widgets\\DashboardStatus',
     'filament.livewire.database-notifications' => 'Filament\\Livewire\\DatabaseNotifications',
     'filament.auth.pages.edit-profile' => 'Filament\\Auth\\Pages\\EditProfile',
     'filament.livewire.global-search' => 'Filament\\Livewire\\GlobalSearch',
@@ -71,8 +70,8 @@
   ),
   'widgets' => 
   array (
-    0 => 'Filament\\Widgets\\AccountWidget',
-    1 => 'Filament\\Widgets\\FilamentInfoWidget',
+    '/home/pranto/Code/Laravel/astrology/app/Filament/Widgets/DashboardStatus.php' => 'App\\Filament\\Widgets\\DashboardStatus',
+    0 => 'App\\Filament\\Widgets\\DashboardStatus',
   ),
   'widgetDirectories' => 
   array (
