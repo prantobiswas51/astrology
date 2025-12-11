@@ -100,6 +100,8 @@ class PaymentController extends Controller
         $p_pob = $request->fields['fields[p_pob]'] ?? null;
         $p_gender = $request->fields['fields[p_gender]'] ?? null;
         $p_name_zodiac = $request->fields['fields[p_name_zodiac]'] ?? null;
+        $additional_field = $request->fields['fields[additional_field]'] ?? null;
+        $customer_note = $request->fields['fields[customer_note]'] ?? null;
 
         if ($numberOfFiles) {
             $before_price = ($product->sale_price ?? $product->price);
@@ -160,6 +162,8 @@ class PaymentController extends Controller
             'p_pob' => $p_pob,
             'p_gender' => $p_gender,
             'p_name_zodiac' => $p_name_zodiac,
+            'additional_field' => $additional_field,
+            'customer_note' => $customer_note,
         ];
 
         // Remove all null or empty values
