@@ -57,3 +57,25 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Docs that should be used for id and names for js and form
+email
+mobile
+name_zodiac
+dob
+tob
+pob
+gender
+question
+social_account
+p_dob
+p_tob
+p_pob
+p_gender
+p_name_zodiac
+compat_qs
+insta_id
+detailed_qs
+cell_number
+additional_field
+customer_note

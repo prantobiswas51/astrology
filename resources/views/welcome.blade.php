@@ -37,7 +37,7 @@
             <h3 class="text-xl text-center font-semibold my-2">Instant e-books + chart guides are finally here.</h3>
             <button class="bg-gray-900 text-white p-2 mt-6 rounded-lg px-5">Get your done for you readings here! No
                 waiting!</button>
-            <p class="text-center text-lg mt-3">All sales are final!</p>
+            <p class="text-center text-lg mt-3">Digital downloads are instant & final — please choose carefully 💜</p>
 
         </section>
 
@@ -231,7 +231,7 @@
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Human Design Chart</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Hop on a 1on1 call with me and ask me anything astrology related!
+                               Unlock your potential with a personalized human design chart reading!
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
