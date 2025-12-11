@@ -107,14 +107,13 @@
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
-                        <img src="{{ asset('images/ph_product.png') }}"
-                            alt="Product Image"
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Birth Chart Reading</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Get insights into your love life and relationships with this focused reading.
+                                Unlock the secrets of your destiny with a personalized birth chart reading!
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
@@ -137,14 +136,14 @@
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
-                        <img src="{{ asset('images/ph_product.png') }}"
-                            alt="Product Image"
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Birth Chart Reading and Phone Call</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Get insights into your love life and relationships with this focused reading.
+                                Get a personal birth chart + a call with me! Easy, luxe, and perfect for your starry
+                                journey
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
@@ -167,14 +166,14 @@
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
-                        <img src="{{ asset('images/ph_product.png') }}"
-                            alt="Product Image"
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Birth Chart Compatibility Reading</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Get insights into your love life and relationships with this focused reading.
+                                Discover the connection between you and your partner with a birth chart compatibility
+                                reading!
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
@@ -197,14 +196,13 @@
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
-                        <img src="{{ asset('images/ph_product.png') }}"
-                            alt="Product Image"
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Phone Call Reading</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Get insights into your love life and relationships with this focused reading.
+                                Hop on a 1on1 call with me and ask me anything astrology related!
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
@@ -227,14 +225,13 @@
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
-                        <img src="{{ asset('images/ph_product.png') }}"
-                            alt="Product Image"
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Video Response Reading</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Get insights into your love life and relationships with this focused reading.
+                                Ask anything, 1 long question! Get a personalized video + text response tailored to you!
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
