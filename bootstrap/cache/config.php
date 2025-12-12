@@ -118,7 +118,7 @@
     'name' => 'Astrology',
     'env' => 'local',
     'debug' => true,
-    'url' => 'http://127.0.0.1:8000',
+    'url' => 'https://astrologybymari.com',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
     'timezone' => 'UTC',
@@ -492,7 +492,7 @@
       array (
         'driver' => 'local',
         'root' => '/home/pranto/Code/Laravel/astrology/storage/app/public',
-        'url' => 'http://127.0.0.1:8000/storage',
+        'url' => 'https://astrologybymari.com/storage',
         'visibility' => 'public',
         'throw' => false,
         'report' => false,
@@ -629,7 +629,7 @@
         'username' => NULL,
         'password' => NULL,
         'timeout' => NULL,
-        'local_domain' => '127.0.0.1',
+        'local_domain' => 'astrologybymari.com',
       ),
       'ses' => 
       array (

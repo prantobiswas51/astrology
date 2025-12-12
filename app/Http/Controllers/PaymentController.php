@@ -125,8 +125,8 @@ class PaymentController extends Controller
                 'quantity' => $quantity,
             ]],
             'mode' => 'payment',
-            'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('payment.cancel'),
+            'success_url' => url('payment/success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => url('payment/cancel') . '?session_id={CHECKOUT_SESSION_ID}',
         ]);
 
         $order = new \App\Models\Order();
