@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class=" pb-6 min-h-screen mx-auto">
+    <div class="max-w-3xl pb-6 min-h-screen mx-auto">
         {{-- Navigation links --}}
         {{-- <section class="nav_tag gap-2 w-full flex justify-between bg-gray-200 p-2 rounded">
             <a href="#birthchart" class="underline">&#8595;Birth Chart</a>
@@ -47,7 +47,7 @@
 
             {{-- product 1 --}}
             <div
-                class="products_grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 pb-6">
+                class="products_grid grid grid-cols-1  gap-6 max-w-7xl mx-auto px-4 pb-6">
 
                 {{-- Product Item --}}
                 <div
@@ -96,13 +96,14 @@
         {{-- Simple readings --}}
 
         <section class="simple_readings ">
-            <h2 class="text-2xl font-bold text-center text-gray-100 my-6">Simple Readings</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 pb-6">
+            <h2 class="text-2xl font-bold text-center text-gray-100 my-6">Personal Astro Readings ⬇️</h2>
+            <div class="grid grid-cols-1  gap-6 max-w-7xl mx-auto px-4 pb-6">
 
 
-
-                {{-- Loop this item --}}
-                {{-- Birth Chart reading here --}}
+                <div id="birthchart_area" class="p-2 max-h-10 font-bold text-center bg-white rounded-full">
+                    Birth Chart Readings here ⬇️
+                </div>
+                {{-- Birth Chart reading --}}
                 <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
@@ -131,7 +132,7 @@
 
                 </div>
 
-                {{-- Birth Chart reading and phone call here --}}
+                {{-- Birth Chart reading and phone call --}}
                 <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
@@ -161,7 +162,7 @@
 
                 </div>
 
-                {{-- Birth Chart reading Compatibility here --}}
+                {{-- Birth Chart Compatibility reading --}}
                 <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
@@ -191,36 +192,7 @@
 
                 </div>
 
-                {{-- Astro phone call --}}
-                <div
-                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
-
-                    <div class="flex">
-                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
-                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
-
-                        <div>
-                            <h3 class="text-xl font-semibold mb-1">Phone Call Reading</h3>
-                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Hop on a 1on1 call with me and ask me anything astrology related!
-                            </p>
-
-                            <h2 class="font-bold text-lg text-sky-800/70">
-                                <del>$70</del> <span class="text-gray-800">$30</span>
-                            </h2>
-                        </div>
-                    </div>
-
-                    <a href="{{ route('product_view', ['slug' => 'phone-call-reading']) }}">
-                        <button
-                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
-                            Get Your Reading Now
-                        </button>
-                    </a>
-
-                </div>
-
-                {{-- Astro Human Design call --}}
+                {{-- Human Design call --}}
                 <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
@@ -231,7 +203,7 @@
                         <div>
                             <h3 class="text-xl font-semibold mb-1">Human Design Chart</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                               Unlock your potential with a personalized human design chart reading!
+                                Unlock your potential with a personalized human design chart reading!
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
@@ -249,6 +221,40 @@
 
                 </div>
 
+                {{-- Birth Chart Madness --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Birth Chart MADNESS!</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Get every birth chart reading, plus a secret bonus!
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$120</del> <span class="text-gray-800">$90</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'birth-chart-madness']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+
+
+                <div id="video_area" class="p-2 max-h-10 font-bold text-center bg-white rounded-full">
+                    Video Response Readings here ⬇️
+                </div>
                 {{-- Video Response reading --}}
                 <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
@@ -278,8 +284,100 @@
 
                 </div>
 
+                {{-- Video Response reading Plus --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
-                {{-- COPY-PASTE ABOVE FOR MORE ITEMS --}}
+                    <div class="flex">
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Video Response Reading Plus</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Ask 2 question of your choice, make it as long as a detailed as you’d like even if it’s
+                                a BOOK
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$60</del> <span class="text-gray-800">$50</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'video-response-reading-plus']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+
+
+                <div id="phonecall_area" class="p-2 max-h-10 font-bold text-center bg-white rounded-full">
+                    Phone Call Readings here ⬇️
+                </div>
+                {{-- Astro phone call --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Phone Call Reading</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Hop on a 1on1 call with me and ask me anything astrology related!
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$70</del> <span class="text-gray-800">$30</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'phone-call-reading']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+                {{-- Personal Astro Therapy --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Personal Astrologer Therapy!</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Where I call you for the month! Some people need more than just one 30 min phone call
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$120</del> <span class="text-gray-800">$90</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'personal-astrology-therapy']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+
             </div>
         </section>
 
