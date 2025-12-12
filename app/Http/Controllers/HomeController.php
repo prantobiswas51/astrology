@@ -15,7 +15,7 @@ class HomeController extends Controller
 
     public function shop()
     {
-        $products = Product::all();
-        return view('shop', compact('products'));
+        $pub_products = Product::where('status', 'published')->get();
+        return view('shop', compact('pub_products'));
     }
 }
