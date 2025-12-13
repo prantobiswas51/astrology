@@ -58,7 +58,8 @@ class OrdersTable
                             ->sortable(),
                         TextColumn::make('order_status')
                             ->label('Order Status')
-                            ->color(fn($state) => match (strtolower($state)) {
+                            ->badge()
+                            ->color(fn($state) => match ($state) {
                                 'Processing' => 'warning',
                                 'Unpaid'     => 'danger',
                                 'Completed'    => 'success',
