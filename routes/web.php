@@ -10,8 +10,8 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/cart', [HomeController::class, 'cart'])->name('cart');
-Route::get('/privacy_policy', [HomeController::class, 'privacyPolicy'])->name('privacy_policy');
-Route::get('/terms_conditions', [HomeController::class, 'termsConditions'])->name('terms_conditions');
+Route::get('/privacy_policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
+Route::get('/terms_conditions', [HomeController::class, 'terms_conditions'])->name('terms_conditions');
 
 Route::get('/product/{slug}', [ProductController::class, 'product'])->name('product_view');
 Route::post('/product/add_to_cart', [HomeController::class, 'add_to_cart'])->name('add_to_cart');

@@ -58,6 +58,12 @@ class OrdersTable
                             ->sortable(),
                         TextColumn::make('order_status')
                             ->label('Order Status')
+                            ->color(fn($state) => match (strtolower($state)) {
+                                'Processing' => 'warning',
+                                'Unpaid'     => 'danger',
+                                'Completed'    => 'success',
+                                default   => 'gray',
+                            })
                             ->sortable(),
                     ]),
                 ])->columnSpanFull(),
