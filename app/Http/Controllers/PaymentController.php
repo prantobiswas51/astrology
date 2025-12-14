@@ -132,7 +132,7 @@ class PaymentController extends Controller
         $order = new \App\Models\Order();
         $order->email = $customer_email;
         $order->user_id = Auth::id() ?? null;
-        $order->total_amount = ($product->sale_price ?? $product->price) * $quantity;
+        $order->total_amount = $final_price;
         $order->stripe_session_id = $session->id;
         $order->order_status = 'Unpaid';
         $order->status = 'Pending';
