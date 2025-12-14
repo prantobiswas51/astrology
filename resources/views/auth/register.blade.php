@@ -1,5 +1,4 @@
 <x-guest-layout>
-
     <div class="py-12 lg:pt-20">
         
         <form method="POST" class="p-6 py-10 m-4 border rounded-lg max-w-md mx-auto bg-white shadow-md"
@@ -44,6 +43,12 @@
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
             </div>
 
+            <!-- Google reCAPTCHA -->
+            <div class="mt-4">
+                <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     href="{{ route('login') }}">
@@ -56,4 +61,6 @@
             </div>
         </form>
     </div>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </x-guest-layout>
