@@ -74,15 +74,14 @@
                                         stroke-width="2"
                                         d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2" />
                                 </svg>
-
                             </button>
                         </form>
                     </div>
                     @else
                     
-                    {{-- <a href="{{ route('login') }}" class="text-black font-medium">Sign In</a>
+                    <a href="{{ route('login') }}" class="text-black font-medium">Sign In</a>
                     <a href="{{ route('register') }}"
-                        class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800">Register</a> --}}
+                        class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800">Register</a>
                     @endauth
                 </div>
             </div>
