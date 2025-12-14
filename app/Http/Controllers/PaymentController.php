@@ -277,7 +277,7 @@ class PaymentController extends Controller
 
         // Do NOT update order here — webhook handles failures correctly
 
-        return view('cancel', ['session' => $session]);
+        return view('failed', ['session' => $session]);
     }
 
 

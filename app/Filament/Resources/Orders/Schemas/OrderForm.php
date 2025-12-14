@@ -23,6 +23,7 @@ class OrderForm
                 TextInput::make('total_amount')
                     ->required()
                     ->numeric()
+                    ->prefix('$')
                     ->default(0.0),
                 Select::make('status')->options([
                     'Pending' => 'Pending',
