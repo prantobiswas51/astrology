@@ -43,11 +43,9 @@
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
             </div>
 
-            <!-- Google reCAPTCHA -->
-            <div class="mt-4">
-                <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
-                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
-            </div>
+            <!-- reCAPTCHA v3 token (hidden) -->
+            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+            <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -62,5 +60,22 @@
         </form>
     </div>
 
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'register'})
+                    .then(function(token) {
+                        document.getElementById('g-recaptcha-response').value = token;
+                        form.submit();
+                    });
+                });
+            });
+        });
+    </script>
 </x-guest-layout>
