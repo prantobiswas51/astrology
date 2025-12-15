@@ -34,7 +34,9 @@ class OrdersTable
                             ->label('Created At')
                             ->dateTime('M d, Y H:i')
                             ->sortable(),
-                        TextColumn::make('notes')->label('Notes')->limit(50),
+
+                        TextColumn::make('notes')->label('Notes')
+                        ->badge()->danger()->limit(150)->prefix('Notes:'),
                     ]),
 
                     // RIGHT SIDE
