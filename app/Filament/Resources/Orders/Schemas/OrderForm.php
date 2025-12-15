@@ -20,6 +20,9 @@ class OrderForm
                 Select::make('user_id')
                     ->relationship('user', 'name')
                     ->label('User')->disabled(),
+                Select::make('id')
+                    ->label('Order ID')
+                    ->disabled(),
                 TextInput::make('total_amount')
                     ->required()
                     ->numeric()
