@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
+use Dom\Text;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -22,11 +23,6 @@ class OrdersTable
                         TextColumn::make('email')
                             ->label('Email address')->searchable()
                             ->searchable(),
-
-                        TextColumn::make('user.name')
-                            ->label('Username')->searchable()
-                            ->sortable()
-                            ->formatStateUsing(fn($state, $record) => $record->user?->name ?? 'Guest'),
                         
                         TextColumn::make('id')
                             ->label('Order ID')
@@ -38,6 +34,7 @@ class OrdersTable
                             ->label('Created At')
                             ->dateTime('M d, Y H:i')
                             ->sortable(),
+                        TextColumn::make('notes')->label('Notes')->limit(50),
                     ]),
 
                     // RIGHT SIDE
