@@ -36,7 +36,7 @@ class OrdersTable
                             ->sortable(),
 
                         TextColumn::make('notes')->label('Notes')
-                        ->badge()->danger()->limit(150)->prefix('Notes:'),
+                        ->color('danger')->limit(150)->prefix('Notes:'),
                     ]),
 
                     // RIGHT SIDE
