@@ -50,16 +50,18 @@ class RegisteredUserController extends Controller
 
         $request->validate($rules);
 
+        $token = Str::random(40);
+
         // Create user
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->remember_token = Str::random(40); // Verification token
+        $user->remember_token = $token; // Verification token
         $user->save();
 
         // Verification URL
-        $verifyUrl = URL::to('/email-check?token=' . $user->remember_token . '&email=' . urlencode($user->email));
+        $verifyUrl = URL::to('/email-check?token=' . $token . '&email=' . urlencode($user->email));
 
         // Build email HTML
         $html = '
