@@ -9,7 +9,6 @@ class VerifyEmailController extends Controller
 {
     public function verify(Request $request)
     {
-
         $email = $request->query('email');
         $token = $request->query('token');
 
@@ -17,9 +16,6 @@ class VerifyEmailController extends Controller
         $user = User::where('email', $email)
             ->where('remember_token', $token)
             ->first();
-
-        $user->email_verified_at = now();
-        $user->save();
 
         if (!$user) {
             return redirect()->route('login')->withErrors([
