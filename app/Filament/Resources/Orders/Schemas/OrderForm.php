@@ -28,7 +28,7 @@ class OrderForm
                     ->numeric()
                     ->prefix('$')
                     ->default(0.0),
-                Select::make('status')->options([
+                Select::make('status')->label('Payment Status')->options([
                     'Pending' => 'Pending',
                     'Paid'    => 'Paid',
                     'Canceled' => 'Canceled',
