@@ -43,9 +43,11 @@
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
             </div>
 
-            <!-- reCAPTCHA v3 token (hidden) -->
-            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-            <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+            <!-- reCAPTCHA v3 token (hidden) - only in production -->
+            @if(app()->environment('production'))
+                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+            @endif
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -60,6 +62,7 @@
         </form>
     </div>
 
+    @if(app()->environment('production'))
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -78,4 +81,5 @@
             });
         });
     </script>
+    @endif
 </x-guest-layout>

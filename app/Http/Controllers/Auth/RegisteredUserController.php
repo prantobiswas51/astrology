@@ -28,12 +28,16 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // Validate including reCAPTCHA v3
-        $request->validate([
+        // Validation rules
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'g-recaptcha-response' => ['required', function ($attribute, $value, $fail) {
+        ];
+
+        // Add reCAPTCHA validation only in production
+        if (app()->environment('production')) {
+            $rules['g-recaptcha-response'] = ['required', function ($attribute, $value, $fail) {
                 $recaptcha = new \ReCaptcha\ReCaptcha(config('services.recaptcha.secret_key'));
                 $response = $recaptcha->setExpectedAction('register')
                                       ->setScoreThreshold(0.5)
@@ -42,8 +46,10 @@ class RegisteredUserController extends Controller
                 if (!$response->isSuccess()) {
                     $fail('reCAPTCHA verification failed. Please try again.');
                 }
-            }],
-        ]);
+            }];
+        }
+
+        $request->validate($rules);
 
         // Create user
         $user = new User();

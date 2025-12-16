@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\VerifyEmailController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
@@ -19,6 +20,7 @@ Route::post('/product/buy_now_prepare', [HomeController::class, 'buy_now_prepare
 
 // Payment Routes
 Route::post('/checkout/create', [PaymentController::class, 'createCheckout'])->name('create_checkout');
+Route::get('/email-check', [VerifyEmailController::class, 'verify']);
 
 // Webhook (must be POST)
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
