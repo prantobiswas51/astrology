@@ -25,7 +25,7 @@ class VerifyEmailController extends Controller
 
         // If already verified
         if ($user->email_verified_at) {
-            return redirect()->route('login')->with('success', 'Your email is already verified.');
+            return redirect()->route('login')->with('status', 'Your email is already verified.');
         }
 
         // Mark verified
@@ -33,6 +33,6 @@ class VerifyEmailController extends Controller
         $user->remember_token = null; // Optional: remove token so link can't be reused
         $user->save();
 
-        return redirect()->route('login')->with('success', 'Email verified successfully! You can now login.');
+        return redirect()->route('login')->with('status', 'Email verified successfully! You can now login.');
     }
 }

@@ -18,6 +18,35 @@
 
 <body class="text-gray-900 bg-gradient-to-tr from-sky-900 to-sky-400 bg-no-repeat bg-cover min-h-screen font-sans">
 
+    @if (session('status'))
+    <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+        <div id="alertBox"
+            class="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded-xl shadow-lg max-w-md animate-fade-in">
+            <span>{{ session('status') }}</span>
+            <button onclick="document.getElementById('alertBox').remove()"
+                class="ml-4 text-green-700 hover:text-green-900 font-bold text-2xl">X</button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
+    </style>
+    @endif
+
     {{-- client design --}}
     @include('layouts.pub_nav')
 
