@@ -283,6 +283,8 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
+        Log::info('Stripe Webhook invoked');
+        Log::error('Stripe Webhook invoked error');
         Stripe::setApiKey($this->stripe_api_key);
 
         $payload = $request->getContent();
