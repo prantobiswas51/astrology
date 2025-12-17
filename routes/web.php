@@ -25,6 +25,7 @@ Route::get('/email-check', [VerifyEmailController::class, 'verify']);
 // Webhook (must be POST)
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+Route::post('/stripe/webhook', [PaymentController::class, 'webhook'])->name('stripe.webhook');
 
 Route::get('/dashboard/download_file/{file}/{order}', [DashboardController::class, 'downloadFile'])->name('file.download');
 

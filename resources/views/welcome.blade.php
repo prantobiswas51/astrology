@@ -381,8 +381,6 @@
             </div>
         </section>
 
-
-        <div class="p-2">All sales final</div>
     </div>
 
 </x-guest-layout>
