@@ -17,6 +17,9 @@
     'app.filament.resources.settings.pages.create-setting' => 'App\\Filament\\Resources\\Settings\\Pages\\CreateSetting',
     'app.filament.resources.settings.pages.edit-setting' => 'App\\Filament\\Resources\\Settings\\Pages\\EditSetting',
     'app.filament.resources.settings.pages.list-settings' => 'App\\Filament\\Resources\\Settings\\Pages\\ListSettings',
+    'app.filament.resources.users.pages.create-user' => 'App\\Filament\\Resources\\Users\\Pages\\CreateUser',
+    'app.filament.resources.users.pages.edit-user' => 'App\\Filament\\Resources\\Users\\Pages\\EditUser',
+    'app.filament.resources.users.pages.list-users' => 'App\\Filament\\Resources\\Users\\Pages\\ListUsers',
     'filament.pages.dashboard' => 'Filament\\Pages\\Dashboard',
     'app.filament.widgets.dashboard-status' => 'App\\Filament\\Widgets\\DashboardStatus',
     'filament.livewire.database-notifications' => 'Filament\\Livewire\\DatabaseNotifications',
@@ -59,6 +62,7 @@
     '/home/pranto/Code/Laravel/astrology/app/Filament/Resources/Productfiles/ProductfileResource.php' => 'App\\Filament\\Resources\\Productfiles\\ProductfileResource',
     '/home/pranto/Code/Laravel/astrology/app/Filament/Resources/Products/ProductResource.php' => 'App\\Filament\\Resources\\Products\\ProductResource',
     '/home/pranto/Code/Laravel/astrology/app/Filament/Resources/Settings/SettingResource.php' => 'App\\Filament\\Resources\\Settings\\SettingResource',
+    '/home/pranto/Code/Laravel/astrology/app/Filament/Resources/Users/UserResource.php' => 'App\\Filament\\Resources\\Users\\UserResource',
   ),
   'resourceDirectories' => 
   array (

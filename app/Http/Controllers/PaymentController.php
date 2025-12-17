@@ -301,34 +301,43 @@ class PaymentController extends Controller
 
             Log::info($event);
 
+            // Handle the event
             switch ($event->type) {
 
                 case 'checkout.session.completed':
                     $session = $event->data->object;
 
-                    Log::info('Stripe Checkout Session completed', ['session_id' => $session->id]);
-
-                    // 🔥 MOVE ORDER UPDATE HERE
                     $order = Order::where('stripe_session_id', $session->id)->first();
 
                     if ($order) {
-                        // update only payment status — SAFE
                         $order->status = 'Paid';
                         $order->order_status = 'Processing';
                         $order->save();
-
-                        Log::info('Order marked as Paid in webhook', ['order_id' => $order->id]);
-                    } else {
-                        Log::error('Order not found for session in webhook', ['session_id' => $session->id]);
                     }
                     break;
 
-                case 'payment_intent.payment_failed':
-                    $paymentIntent = $event->data->object;
+                case 'checkout.session.async_payment_succeeded':
+                    $session = $event->data->object;
 
-                    Log::error('Stripe Payment Intent failed', [
-                        'payment_intent_id' => $paymentIntent->id
-                    ]);
+                    $order = Order::where('stripe_session_id', $session->id)->first();
+
+                    if ($order && $order->status !== 'Paid') {
+                        $order->status = 'Paid';
+                        $order->order_status = 'Processing';
+                        $order->save();
+                    }
+                    break;
+
+                case 'checkout.session.async_payment_failed':
+                    $session = $event->data->object;
+
+                    $order = Order::where('stripe_session_id', $session->id)->first();
+
+                    if ($order) {
+                        $order->status = 'Failed';
+                        $order->order_status = 'Payment Failed';
+                        $order->save();
+                    }
                     break;
 
                 case 'checkout.session.expired':
@@ -340,10 +349,6 @@ class PaymentController extends Controller
                         $order->status = 'Unpaid';
                         $order->order_status = 'Expired';
                         $order->save();
-
-                        Log::info('Order marked as Expired', [
-                            'order_id' => $order->id
-                        ]);
                     }
                     break;
             }
