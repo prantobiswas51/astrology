@@ -30,7 +30,7 @@ class VerifyEmailController extends Controller
 
         // Mark verified
         $user->email_verified_at = now();
-        $user->remember_token = null; // Optional: remove token so link can't be reused
+        $user->remember_token = null;
         $user->save();
 
         return redirect()->route('login')->with('status', 'Email verified successfully! You can now login.');

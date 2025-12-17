@@ -20,12 +20,11 @@ Route::post('/product/buy_now_prepare', [HomeController::class, 'buy_now_prepare
 
 // Payment Routes
 Route::post('/checkout/create', [PaymentController::class, 'createCheckout'])->name('create_checkout');
-Route::get('/email-check', [VerifyEmailController::class, 'verify']);
+Route::get('/email-check', [VerifyEmailController::class, 'verify'])->name('email.verify');
 
 // Webhook (must be POST)
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
-Route::post('/stripe/webhook', [PaymentController::class, 'webhook']);
 
 Route::get('/dashboard/download_file/{file}/{order}', [DashboardController::class, 'downloadFile'])->name('file.download');
 

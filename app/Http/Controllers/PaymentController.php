@@ -283,15 +283,11 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
-        Log::info('Stripe Webhook invoked');
-        Log::error('Stripe Webhook invoked error web.php');
         Stripe::setApiKey($this->stripe_api_key);
 
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
         $endpoint_secret = $this->endpoint_secret;
-
-        Log::info('Stripe Webhook received', ['payload' => $request->all()]);
 
         try {
             $event = Webhook::constructEvent(
@@ -299,9 +295,6 @@ class PaymentController extends Controller
                 $sig_header,
                 $endpoint_secret
             );
-
-
-            Log::info($event);
 
             // Handle the event
             switch ($event->type) {
@@ -348,8 +341,8 @@ class PaymentController extends Controller
                     $order = Order::where('stripe_session_id', $session->id)->first();
 
                     if ($order && $order->status !== 'Paid') {
-                        $order->status = 'Unpaid';
-                        $order->order_status = 'Expired';
+                        $order->status = 'Expired';
+                        $order->order_status = 'Cancelled';
                         $order->save();
                     }
                     break;

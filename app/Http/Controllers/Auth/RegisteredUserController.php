@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -39,9 +40,9 @@ class RegisteredUserController extends Controller
             $rules['g-recaptcha-response'] = ['required', function ($attribute, $value, $fail) {
                 $recaptcha = new \ReCaptcha\ReCaptcha(config('services.recaptcha.secret_key'));
                 $response = $recaptcha->setExpectedAction('register')
-                                      ->setScoreThreshold(0.5)
-                                      ->verify($value, request()->ip());
-                
+                    ->setScoreThreshold(0.5)
+                    ->verify($value, request()->ip());
+
                 if (!$response->isSuccess()) {
                     $fail('reCAPTCHA verification failed. Please try again.');
                 }
@@ -50,18 +51,31 @@ class RegisteredUserController extends Controller
 
         $request->validate($rules);
 
-        $token = Str::random(40);
+
+        $token = Str::random(64);
+
+        Log::info('Registration verification token', [
+            'email' => $request->email,
+            'token' => $token,
+        ]);
 
         // Create user
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->remember_token = $token; // Verification token
+        $user->email_verification_token = $token;
         $user->save();
 
         // Verification URL
-        $verifyUrl = URL::to('/email-check?token=' . $token . '&email=' . urlencode($user->email));
+        $verifyUrl = URL::temporarySignedRoute(
+            'email.verify',
+            now()->addMinutes(60),
+            [
+                'email' => $user->email,
+                'token' => $token,
+            ]
+        );
 
         // Build email HTML
         $html = '
