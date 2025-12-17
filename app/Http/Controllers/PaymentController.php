@@ -298,6 +298,9 @@ class PaymentController extends Controller
                 $endpoint_secret
             );
 
+
+            Log::info($event);
+
             switch ($event->type) {
 
                 case 'checkout.session.completed':
@@ -326,6 +329,22 @@ class PaymentController extends Controller
                     Log::error('Stripe Payment Intent failed', [
                         'payment_intent_id' => $paymentIntent->id
                     ]);
+                    break;
+
+                case 'checkout.session.expired':
+                    $session = $event->data->object;
+
+                    $order = Order::where('stripe_session_id', $session->id)->first();
+
+                    if ($order && $order->status !== 'Paid') {
+                        $order->status = 'Unpaid';
+                        $order->order_status = 'Expired';
+                        $order->save();
+
+                        Log::info('Order marked as Expired', [
+                            'order_id' => $order->id
+                        ]);
+                    }
                     break;
             }
 
