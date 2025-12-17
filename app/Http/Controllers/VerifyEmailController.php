@@ -14,7 +14,7 @@ class VerifyEmailController extends Controller
 
         // Find the user
         $user = User::where('email', $email)
-            ->where('remember_token', $token)
+            ->where('email_verification_token', $token)
             ->first();
 
         if (!$user) {
