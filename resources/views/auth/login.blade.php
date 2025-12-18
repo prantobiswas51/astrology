@@ -1,6 +1,7 @@
 <x-guest-layout>
 
     <div class="p-6 m-4 border py-12 md:mt-20 rounded-lg max-w-md mx-auto bg-white shadow-md">
+        <p class="text-2xl text-center">Login</p>
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <form class="" method="POST" action="{{ route('login') }}">

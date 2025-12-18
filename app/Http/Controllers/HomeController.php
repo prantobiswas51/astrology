@@ -19,6 +19,11 @@ class HomeController extends Controller
         return view('shop', compact('pub_products'));
     }
 
+    public function contact()
+    {
+        return view('contact');
+    }
+
     public function cart()
     {
         return redirect()->route('home');
