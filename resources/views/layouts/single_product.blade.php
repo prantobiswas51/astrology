@@ -356,6 +356,8 @@
         document.querySelector("button[value='buy']").addEventListener("click", async function () {
             if (!validateBeforeSubmit()) return;
 
+            openPaymentModal();
+
             let data = collectProductData();
 
             if ("{{ $product->type }}" === "digital" && !validateFiles()) {

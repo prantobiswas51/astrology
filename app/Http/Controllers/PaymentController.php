@@ -29,18 +29,17 @@ class PaymentController extends Controller
 
     public function createCheckout(Request $request)
     {
-
         // Validate product ID and quantity
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'quantity'   => 'required|integer|min:1',
         ]);
 
-        $product = \App\Models\Product::find($request->product_id);
-        $selectedFiles = $request->input('files', []);
+        $product = Product::findOrFail($request->product_id);
 
+        $selectedFiles = $request->input('files', []);
         if (!is_array($selectedFiles)) {
-            $selectedFiles = [$selectedFiles];  //Array
+            $selectedFiles = [$selectedFiles];
         }
 
         $numberOfFiles = count($selectedFiles);
@@ -55,121 +54,131 @@ class PaymentController extends Controller
             ]);
         }
 
-        // Validate custom fields dynamically
-        foreach ($request->fields as $key => $value) {
-            if (empty($value)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Field {$key} is required.",
-                ], 400);
+        // ✅ Safe check (prevents crash if fields is null)
+        if (is_array($request->fields)) {
+            foreach ($request->fields as $key => $value) {
+                if (empty($value)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Field {$key} is required.",
+                    ], 400);
+                }
             }
         }
 
-        // dd($request->all());
-
-        // Example: validate email field
+        // Email validation
         $email = $request->input('email');
-
-        if ($email !== null) {
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid email format.',
-                ], 400);
-            }
+        if ($email !== null && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid email format.',
+            ], 400);
         }
 
-        // dd($request->all());
-
-
-        $product = \App\Models\Product::findOrFail($request->product_id);
         $quantity = $request->quantity;
 
-        $customer_email = $email;
-        $name_zodiac = $request->fields['fields[name_zodiac]'] ?? null;
-        $birht_date = $request->fields['fields[dob]'] ?? null;
-        $birth_time = $request->fields['fields[tob]'] ?? null;
-        $birth_place = $request->fields['fields[pob]'] ?? null;
-        $gender = $request->fields['fields[gender]'] ?? null;
+        // Custom fields (unchanged)
+        $name_zodiac     = $request->fields['fields[name_zodiac]'] ?? null;
+        $birht_date      = $request->fields['fields[dob]'] ?? null;
+        $birth_time      = $request->fields['fields[tob]'] ?? null;
+        $birth_place     = $request->fields['fields[pob]'] ?? null;
+        $gender          = $request->fields['fields[gender]'] ?? null;
         $detail_question = $request->fields['fields[detailed_qs]'] ?? null;
-        $cell_number = $request->fields['fields[cell_number]'] ?? null;
-        $insta_id = $request->fields['fields[insta_id]'] ?? null;
+        $cell_number     = $request->fields['fields[cell_number]'] ?? null;
+        $insta_id        = $request->fields['fields[insta_id]'] ?? null;
 
-        $p_dob = $request->fields['fields[p_dob]'] ?? null;
-        $p_tob = $request->fields['fields[p_tob]'] ?? null;
-        $p_pob = $request->fields['fields[p_pob]'] ?? null;
-        $p_gender = $request->fields['fields[p_gender]'] ?? null;
-        $p_name_zodiac = $request->fields['fields[p_name_zodiac]'] ?? null;
+        $p_dob          = $request->fields['fields[p_dob]'] ?? null;
+        $p_tob          = $request->fields['fields[p_tob]'] ?? null;
+        $p_pob          = $request->fields['fields[p_pob]'] ?? null;
+        $p_gender       = $request->fields['fields[p_gender]'] ?? null;
+        $p_name_zodiac  = $request->fields['fields[p_name_zodiac]'] ?? null;
         $additional_field = $request->fields['fields[additional_field]'] ?? null;
-        $customer_note = $request->fields['fields[customer_note]'] ?? null;
+        $customer_note    = $request->fields['fields[customer_note]'] ?? null;
 
+        // Price calculation (unchanged)
         if ($numberOfFiles) {
             $before_price = ($product->sale_price ?? $product->price);
-            $final_price = $before_price * $numberOfFiles;
+            $final_price  = $before_price * $numberOfFiles;
         } else {
             $final_price = ($product->sale_price ?? $product->price);
         }
 
         Stripe::setApiKey($this->stripe_api_key);
 
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'usd',
-                    'product_data' => [
-                        'name' => $product->name,
-                    ],
-                    'unit_amount' => $final_price * 100, // cents
-                ],
-                'quantity' => $quantity,
-            ]],
-            'mode' => 'payment',
-            'success_url' => url('payment/success') . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => url('payment/cancel') . '?session_id={CHECKOUT_SESSION_ID}',
-        ]);
-
         $order = new \App\Models\Order();
-        $order->email = $customer_email;
-        $order->user_id = Auth::id() ?? null;
+        $order->email        = $email;
+        $order->user_id      = Auth::id();
         $order->total_amount = $final_price;
-        $order->stripe_session_id = $session->id;
         $order->order_status = 'Unpaid';
-        $order->status = 'Pending';
+        $order->status       = 'Pending';
         $order->save();
 
-        // I need to save custom fields which are not null, if null ignore them
+        try {
+
+            $session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['card'],
+                'mode' => 'payment',
+
+                'metadata' => [
+                    'order_id' => $order->id,
+                ],
+
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => $product->name,
+                        ],
+                        'unit_amount' => (int) ($final_price * 100),
+                    ],
+                    'quantity' => $quantity,
+                ]],
+
+                'success_url' => url('payment/success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url'  => url('payment/cancel') . '?session_id={CHECKOUT_SESSION_ID}',
+            ]);
+
+            // Save session ID
+            $order->stripe_session_id = $session->id;
+            $order->save();
+        } catch (\Throwable $e) {
+
+            $order->status = 'CheckoutFailed';
+            $order->save();
+
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to create payment session.',
+            ], 500);
+        }
+
+        // Order Item (unchanged)
         $orderItem = new \App\Models\OrderItem();
-        $orderItem->order_id = $order->id;
+        $orderItem->order_id   = $order->id;
         $orderItem->product_id = $product->id;
-        $orderItem->quantity = $quantity;
-        $orderItem->price = ($product->sale_price ?? $product->price);
+        $orderItem->quantity   = $quantity;
+        $orderItem->price      = ($product->sale_price ?? $product->price);
 
-        // allow users to save files in the dashboard and Mail them the links after purchase
-
-        $extra = [
-            'name_zodiac' => $name_zodiac,
-            'birth_date' => $birht_date,
-            'birth_time' => $birth_time,
-            'birth_place' => $birth_place,
-            'gender' => $gender,
-            'detail_question' => $detail_question,
-            'cell_number' => $cell_number,
-            'insta_id' => $insta_id,
-            'file_ids' => $selectedFiles,
-            'p_dob' => $p_dob,
-            'p_tob' => $p_tob,
-            'p_pob' => $p_pob,
-            'p_gender' => $p_gender,
-            'p_name_zodiac' => $p_name_zodiac,
+        $extra = array_filter([
+            'name_zodiac'      => $name_zodiac,
+            'birth_date'       => $birht_date,
+            'birth_time'       => $birth_time,
+            'birth_place'      => $birth_place,
+            'gender'           => $gender,
+            'detail_question'  => $detail_question,
+            'cell_number'      => $cell_number,
+            'insta_id'         => $insta_id,
+            'file_ids'         => $selectedFiles,
+            'p_dob'            => $p_dob,
+            'p_tob'            => $p_tob,
+            'p_pob'            => $p_pob,
+            'p_gender'         => $p_gender,
+            'p_name_zodiac'    => $p_name_zodiac,
             'additional_field' => $additional_field,
-            'customer_note' => $customer_note,
-        ];
-
-        // Remove all null or empty values
-        $extra = array_filter($extra, function ($v) {
-            return !is_null($v) && $v !== '';
-        });
+            'customer_note'    => $customer_note,
+        ], fn($v) => !is_null($v) && $v !== '');
 
         $orderItem->extra_information = json_encode($extra);
         $orderItem->save();
@@ -179,6 +188,7 @@ class PaymentController extends Controller
             'redirect_url' => $session->url,
         ]);
     }
+
 
     public function success(Request $request)
     {

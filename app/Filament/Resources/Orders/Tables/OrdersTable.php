@@ -32,7 +32,8 @@ class OrdersTable
 
                         TextColumn::make('created_at')
                             ->label('Created At')
-                            ->dateTime('M d, Y H:i')
+                            ->prefix('At : ')
+                            ->dateTime('M d, Y H:i:s')
                             ->sortable(),
 
                         TextColumn::make('notes')->label('Notes')
