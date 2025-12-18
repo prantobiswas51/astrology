@@ -36,7 +36,7 @@ class DashboardController extends Controller
         }
 
         // Check if the order is paid
-        if ($order->status !== 'Paid') {
+        if ($order->status !== 'Paid' && $order->status !== 'Completed') {
             abort(403, 'You need to complete the payment to download this file.');
         }
 

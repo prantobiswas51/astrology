@@ -70,13 +70,13 @@
 
                             {{-- DIGITAL PRODUCT --}}
                             @if($item->product->type === 'digital')
-                            @if($order->status === 'Paid' && isset($extra['file_ids']))
+                            @if($order->status === 'Completed' || $order->status === 'Paid' && isset($extra['file_ids']))
                             @php
                             $files = $item->product->files->whereIn('id', $extra['file_ids']);
                             @endphp
                             <div class="flex flex-wrap gap-2 mt-2">
                                 @foreach($files as $file)
-                                @if($order->status === 'Paid')
+                                @if($order->status === 'Completed' || $order->status === 'Paid')
                                 <a href="{{ route('file.download', [$file->id, $order->id]) }}"
                                     class="inline-flex items-center px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-700 transition">
                                     Download {{ $file->file_name }}
