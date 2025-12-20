@@ -29,8 +29,11 @@ class OrderForm
                     ->prefix('$')
                     ->default(0.0),
                 Select::make('status')->label('Payment Status')->options([
+                    'Unpaid' => 'Unpaid',
                     'Pending' => 'Pending',
                     'Paid'    => 'Paid',
+                    'Expired' => 'Expired',
+                    'Completed' => 'Completed',
                     'Canceled' => 'Canceled',
                 ])
                     ->required()
