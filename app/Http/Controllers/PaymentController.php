@@ -120,8 +120,15 @@ class PaymentController extends Controller
                 'mode' => 'payment',
 
                 'metadata' => [
-                    'order_number' => $order->id,
-                    'wp_user_id'  => Auth::id() ?? $order->email,
+                    'order_number' => (string) $order->id,
+                    'wp_user_id'  => (string) Auth::id() ?? $order->email,
+                ],
+
+                'payment_intent_data' => [
+                    'metadata' => [
+                        'order_number' => (string) $order->id,
+                        'wp_user_id'   => (string) (Auth::id() ?? $order->email),
+                    ],
                 ],
 
                 'line_items' => [[
