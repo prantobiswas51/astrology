@@ -51,13 +51,7 @@ class RegisteredUserController extends Controller
 
         $request->validate($rules);
 
-
         $token = Str::random(64);
-
-        Log::info('Registration verification token', [
-            'email' => $request->email,
-            'token' => $token,
-        ]);
 
         // Create user
         $user = new User();
@@ -104,6 +98,6 @@ class RegisteredUserController extends Controller
         // Send email
         sendCustomMail($user->email, 'Verify Your Email - Astrology by Mari', $html, $user->name);
 
-        return redirect()->route('login')->with('success', 'Please check your email to verify your account.');
+        return redirect()->route('check_mail');
     }
 }

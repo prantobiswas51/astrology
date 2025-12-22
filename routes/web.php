@@ -13,6 +13,11 @@ Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/cart', [HomeController::class, 'cart'])->name('cart');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+Route::get('/check-mail', function () {
+    return view('check_mail');
+})->name('check_mail');
+
+
 Route::get('/privacy_policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
 Route::get('/terms_conditions', [HomeController::class, 'terms_conditions'])->name('terms_conditions');
 
