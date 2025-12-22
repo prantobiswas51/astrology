@@ -88,8 +88,8 @@ class RegisteredUserController extends Controller
                         </a>
                 </div>
                 <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                    <p>Need help? Contact <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a></p>
-                    <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                    <p>Need help? Contact <a href="mailto:astrologybymari@gmail.com" style="color: #4a90e2;">Astrologybymari@gmail.com</a></p>
+                    <p>© ' . date("Y") . ' AstrologyByMari. All rights reserved.</p>
                 </div>
             </div>
         </div>
