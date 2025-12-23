@@ -7,7 +7,7 @@
     </style>
 
     </style>
-    <div class="max-w-7xl bg-gray-100 mx-auto px-4 py-10">
+    <div class="max-w-7xl bg-gray-200 min-h-screen mx-auto px-4 py-10">
 
         <!-- BUY NOW PAYMENT POPUP -->
         <div id="paymentModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">

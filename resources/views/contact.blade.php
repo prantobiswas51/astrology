@@ -1,12 +1,12 @@
 <x-guest-layout>
 
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl mx-auto mt-16 p-8 text-center">
+    <div class="w-full max-w-md bg-white mb-20 rounded-2xl shadow-xl mx-auto mt-20 p-8 text-center">
 
         <h2 class="text-2xl font-bold text-gray-800 mb-6">
             ✨ Astrology by Mari ✨
         </h2>
 
-        <div class="space-y-4">
+        <div class="space-y-4 ">
 
             <!-- Email -->
             <a href="mailto:support@astrologybymari.com"

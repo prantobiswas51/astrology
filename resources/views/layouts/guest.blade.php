@@ -50,7 +50,7 @@
     {{-- client design --}}
     @include('layouts.pub_nav')
 
-    <div class="max-w-7xl mx-auto mb-20">
+    <div class="max-w-7xl mx-auto mt-40">
         {{ $slot }}
     </div>
 

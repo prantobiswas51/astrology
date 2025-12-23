@@ -1,4 +1,4 @@
-<nav class="bg-white border-b bg-sky-100 border-gray-100">
+<nav class="border-b bg-white border-red-700 fixed w-full z-50 top-0 mb-16" style="z-index: 9999;">
 
     <style>
         /* Hide navigation links on small screens */

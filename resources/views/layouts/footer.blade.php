@@ -1,7 +1,7 @@
-<div class="bg-light text-center text-lg-start bg-gray-900 text-white bottom-0 fixed w-full">
+<div class="bg-light text-center text-lg-start bg-gray-900 text-white w-full">
     <div class="max-w-6xl flex py-4 flex-col md:flex-row justify-between items-center mx-auto px-4 w-full">
         <div class="text-center">
-            © {{ date('Y') }} AstrologyByMari. All rights reserved.
+            © {{ date('Y') }} AstrologyByMari. All rights reserved. <span>Design and Developed by <a class="font-bold underline" href="https://pranto.bongomaker.com">Pranto Biswas</a></span>
         </div>
         {{-- footer menu --}}
 
