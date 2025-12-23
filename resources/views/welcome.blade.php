@@ -10,7 +10,6 @@
 
         {{-- Hero Section --}}
 
-
         <section class="">
             <img src="{{ asset('images/mari_profile.png') }}"
                 class="w-40 rounded-full mx-auto bg-gray-300 mt-6 relative z-20">
