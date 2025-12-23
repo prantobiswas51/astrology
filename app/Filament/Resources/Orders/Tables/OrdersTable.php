@@ -72,6 +72,28 @@ class OrdersTable
             ->recordActions([
                 EditAction::make(),
             ])
+            ->filters([
+                // Filter by order status
+                \Filament\Tables\Filters\SelectFilter::make('order_status')
+                    ->options([
+                        'Processing' => 'Processing',
+                        'Unpaid' => 'Unpaid',
+                        'Completed' => 'Completed',
+                        'Cancelled' => 'Cancelled',
+                    ])
+                    ->label('Order Status'),
+                // Filter by payment status
+                \Filament\Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'Unpaid' => 'Unpaid',
+                        'Pending' => 'Pending',
+                        'Paid' => 'Paid',
+                        'Expired' => 'Expired',
+                        'Completed' => 'Completed',
+                        'Cancelled' => 'Cancelled',
+                    ])
+                    ->label('Payment Status'),
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
