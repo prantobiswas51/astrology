@@ -292,9 +292,9 @@
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
-                            <h3 class="text-xl font-semibold mb-1">Video Response Reading Plus</h3>
+                            <h3 class="text-xl font-semibold mb-1">Video Response Reading</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Ask 2 question of your choice, make it as long as a detailed as you’d like even if it’s
+                                Ask 1 question of your choice, make it as long as a detailed as you’d like even if it’s
                                 a BOOK
                             </p>
 
