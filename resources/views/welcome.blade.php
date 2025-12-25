@@ -333,7 +333,7 @@
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
-                                <del>$70</del> <span class="text-gray-800">$60</span>
+                                <del>$35</del> <span class="text-gray-800">$30</span>
                             </h2>
                         </div>
                     </div>
@@ -362,7 +362,7 @@
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
-                                <del>$120</del> <span class="text-gray-800">$75</span>
+                                <del>$70</del> <span class="text-gray-800">$60</span>
                             </h2>
                         </div>
                     </div>
