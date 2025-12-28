@@ -45,8 +45,7 @@
             <h2 class="text-xl font-bold text-center my-6">Get your done for you readings here! No waiting!</h2>
 
             {{-- product 1 --}}
-            <div
-                class="products_grid grid grid-cols-1  gap-6 max-w-7xl mx-auto px-4 pb-6">
+            <div class="products_grid grid grid-cols-1  gap-6 max-w-7xl mx-auto px-4 pb-6">
 
                 {{-- Product Item --}}
                 <div
@@ -111,13 +110,13 @@
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
-                            <h3 class="text-xl font-semibold mb-1">Birth Chart Reading(With Free Human Design Chart)</h3>
+                            <h3 class="text-xl font-semibold mb-1">Birth Chart Reading</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
                                 Unlock the secrets of your destiny with a personalized birth chart reading!
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
-                                <del>$60</del> <span class="text-gray-800">$50</span>
+                                <del>$35</del> <span class="text-gray-800">$30</span>
                             </h2>
                         </div>
                     </div>
@@ -132,7 +131,7 @@
                 </div>
 
                 {{-- Birth Chart reading and phone call --}}
-                {{-- <div
+                <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
@@ -159,7 +158,7 @@
                         </button>
                     </a>
 
-                </div> --}}
+                </div>
 
                 {{-- Birth Chart Compatibility reading --}}
                 <div
@@ -192,7 +191,7 @@
                 </div>
 
                 {{-- Human Design call --}}
-                {{-- <div
+                <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
@@ -218,7 +217,7 @@
                         </button>
                     </a>
 
-                </div> --}}
+                </div>
 
                 {{-- Birth Chart Madness --}}
                 <div
@@ -250,12 +249,11 @@
                 </div>
 
 
-
                 <div id="video_area" class="p-2 max-h-10 font-bold text-center bg-white rounded-full">
                     Video Response Readings here ⬇️
                 </div>
                 {{-- Video Response reading --}}
-                {{-- <div
+                <div
                     class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
 
                     <div class="flex">
@@ -281,7 +279,7 @@
                         </button>
                     </a>
 
-                </div> --}}
+                </div>
 
                 {{-- Video Response reading Plus --}}
                 <div
@@ -292,7 +290,7 @@
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
-                            <h3 class="text-xl font-semibold mb-1">Video Response Reading</h3>
+                            <h3 class="text-xl font-semibold mb-1">Video Response Reading Plus</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
                                 Ask 2 question of your choice, make it as long as a detailed as you’d like even if it’s
                                 a BOOK
@@ -314,7 +312,6 @@
                 </div>
 
 
-
                 <div id="phonecall_area" class="p-2 max-h-10 font-bold text-center bg-white rounded-full">
                     Phone Call Readings here ⬇️
                 </div>
@@ -333,41 +330,12 @@
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
-                                <del>$35</del> <span class="text-gray-800">$30</span>
+                                <del>$70</del> <span class="text-gray-800">$30</span>
                             </h2>
                         </div>
                     </div>
 
                     <a href="{{ route('product_view', ['slug' => 'phone-call-reading']) }}">
-                        <button
-                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
-                            Get Your Reading Now
-                        </button>
-                    </a>
-
-                </div>
-
-                 {{-- Astro phone call 60 mnt --}}
-                <div
-                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
-
-                    <div class="flex">
-                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
-                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
-
-                        <div>
-                            <h3 class="text-xl font-semibold mb-1">Phone Call Reading (60 minutes)</h3>
-                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
-                                Hop on a 1on1 call with me and ask me anything astrology related!
-                            </p>
-
-                            <h2 class="font-bold text-lg text-sky-800/70">
-                                <del>$70</del> <span class="text-gray-800">$60</span>
-                            </h2>
-                        </div>
-                    </div>
-
-                    <a href="{{ route('product_view', ['slug' => 'phone-call-60']) }}">
                         <button
                             class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
                             Get Your Reading Now
