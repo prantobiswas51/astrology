@@ -29,6 +29,13 @@ class PaymentController extends Controller
 
     public function createCheckout(Request $request)
     {
+        Log::channel('stripe')->info('Stripe checkout request received', [
+            'product_id' => $request->input('product_id'),
+            'quantity' => $request->input('quantity'),
+            'user_id' => Auth::id(),
+            'url' => $request->fullUrl(),
+        ]);
+
         // Validate product ID and quantity
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
@@ -154,10 +161,7 @@ class PaymentController extends Controller
             $order->status = 'CheckoutFailed';
             $order->save();
 
-            Log::build([
-                'driver' => 'single',
-                'path' => storage_path('logs/stripe.log'),
-            ])->error('Stripe checkout session creation failed', [
+            Log::channel('stripe')->error('Stripe checkout session creation failed', [
                 'exception' => get_class($e),
                 'message' => $e->getMessage(),
                 'order_id' => $order->id,
