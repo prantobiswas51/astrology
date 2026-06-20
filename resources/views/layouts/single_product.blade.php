@@ -370,22 +370,44 @@
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        "Accept": "application/json",
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
                     body: JSON.stringify(data)
                 });
 
-                const res = await response.json();
+                const responseText = await response.text();
+                let res;
+
+                try {
+                    res = JSON.parse(responseText);
+                } catch (parseError) {
+                    throw new Error(
+                        `Server returned HTTP ${response.status} with a non-JSON response: ${responseText.substring(0, 500)}`
+                    );
+                }
 
                 if (!response.ok) {
-                    alert(res.message || "Something went wrong");
+                    const validationErrors = res.errors
+                        ? Object.values(res.errors).flat().join("\n")
+                        : null;
+                    const errorMessage = validationErrors || res.message || `Checkout failed (HTTP ${response.status})`;
+
+                    console.error("Checkout request failed:", {
+                        status: response.status,
+                        response: res
+                    });
+                    closePaymentModal();
+                    alert(errorMessage);
                     return;
                 }
 
                 window.location.href = res.redirect_url;
 
             } catch (err) {
-                console.error(err);
+                console.error("Checkout error:", err);
+                closePaymentModal();
+                alert(err.message || "Unable to start checkout. Check the browser console for details.");
             }
         });               
 
