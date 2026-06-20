@@ -154,11 +154,25 @@ class PaymentController extends Controller
             $order->status = 'CheckoutFailed';
             $order->save();
 
+            Log::build([
+                'driver' => 'single',
+                'path' => storage_path('logs/stripe.log'),
+            ])->error('Stripe checkout session creation failed', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'user_id' => Auth::id(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             report($e);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Unable to create payment session.',
+                'message' => 'Unable to create payment session: ' . $e->getMessage(),
             ], 500);
         }
 
@@ -265,14 +279,19 @@ class PaymentController extends Controller
                 'order' => $order
             ])->render();
 
+
+
             // Send email (unchanged)
             sendCustomMail(
                 $order->email,
                 'Your Digital Order Files - AstrologybyMari',
                 $html,
-                $order->user->name ?? 'Customer',
+                $order->user->name ?? 'Guest',
                 $attachmentPaths
             );
+
+            $order->order_status = "Completed";
+            $order->save();
         }
 
         return view('success', ['session' => $session]);
@@ -327,6 +346,7 @@ class PaymentController extends Controller
                         $order->order_status = 'Processing';
                         $order->save();
                     }
+
                     break;
 
                 case 'checkout.session.async_payment_succeeded':
