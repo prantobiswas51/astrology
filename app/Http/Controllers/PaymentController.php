@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Stripe\Stripe;
 use Stripe\Webhook;
+use Stripe\Exception\SignatureVerificationException;
+use UnexpectedValueException;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
@@ -25,6 +27,14 @@ class PaymentController extends Controller
     {
         $this->stripe_api_key = Setting::value('stripe_api_key');
         $this->endpoint_secret = Setting::value('endpoint_secret');
+
+        if (empty($this->stripe_api_key)) {
+            Log::channel('stripe')->critical('Stripe API key is missing from settings table. All Stripe calls will fail.');
+        }
+
+        if (empty($this->endpoint_secret)) {
+            Log::channel('stripe')->critical('Stripe webhook endpoint secret is missing from settings table. Webhook signature verification will fail.');
+        }
     }
 
     public function createCheckout(Request $request)
@@ -37,9 +47,13 @@ class PaymentController extends Controller
         ]);
 
         // Validate product ID and quantity
+        // NOTE: max:20 is a sanity cap to stop runaway/accidental quantities from
+        // producing huge unintended charges (a large first-time live charge is
+        // exactly the kind of transaction issuing banks auto-decline as fraud).
+        // Adjust the max if your catalog legitimately needs larger bulk orders.
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
-            'quantity'   => 'required|integer|min:1',
+            'quantity'   => 'required|integer|min:1|max:20',
         ]);
 
         $product = Product::findOrFail($request->product_id);
@@ -111,6 +125,14 @@ class PaymentController extends Controller
         }
 
         Stripe::setApiKey($this->stripe_api_key);
+
+        Log::channel('stripe')->info('Computed checkout total', [
+            'product_id' => $product->id,
+            'quantity' => $quantity,
+            'number_of_files' => $numberOfFiles,
+            'unit_price' => $product->sale_price ?? $product->price,
+            'final_price' => $final_price,
+        ]);
 
         $order = new \App\Models\Order();
         $order->email        = $email;
@@ -220,9 +242,24 @@ class PaymentController extends Controller
     {
         Stripe::setApiKey($this->stripe_api_key);
 
-        $session = Session::retrieve($request->session_id);
+        try {
+            $session = Session::retrieve($request->session_id);
+        } catch (\Throwable $e) {
+            Log::channel('stripe')->error('Failed to retrieve Stripe session on success page', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'session_id' => $request->session_id,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
 
-        Log::info("Success page loaded for session: " . $session->id);
+            return view('success', ['session' => null]);
+        }
+
+        Log::channel('stripe')->info('Success page loaded', [
+            'session_id' => $session->id,
+            'payment_status' => $session->payment_status ?? null,
+        ]);
 
         // Fetch order (status already updated by webhook)
         $order = Order::where('stripe_session_id', $session->id)
@@ -230,7 +267,7 @@ class PaymentController extends Controller
             ->first();
 
         if (!$order) {
-            Log::error("Order not found on success page", [
+            Log::channel('stripe')->error("Order not found on success page", [
                 'session_id' => $session->id
             ]);
 
@@ -271,31 +308,43 @@ class PaymentController extends Controller
                 if (file_exists($fullPath)) {
                     $attachmentPaths[] = $fullPath;
                 } else {
-                    Log::warning('Digital product file missing', [
+                    Log::channel('stripe')->warning('Digital product file missing', [
+                        'order_id' => $order->id,
                         'file_id' => $file->id,
                         'path' => $fullPath
                     ]);
                 }
             }
 
-            $html = view('emails.digital_order_files', [
-                'files' => $files,
-                'order' => $order
-            ])->render();
+            try {
+                $html = view('emails.digital_order_files', [
+                    'files' => $files,
+                    'order' => $order
+                ])->render();
 
+                // Send email (unchanged)
+                sendCustomMail(
+                    $order->email,
+                    'Your Digital Order Files - AstrologybyMari',
+                    $html,
+                    $order->user->name ?? 'Guest',
+                    $attachmentPaths
+                );
 
+                $order->order_status = "Completed";
+                $order->save();
+            } catch (\Throwable $e) {
+                Log::channel('stripe')->error('Failed to send digital order files email', [
+                    'order_id' => $order->id,
+                    'email' => $order->email,
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ]);
 
-            // Send email (unchanged)
-            sendCustomMail(
-                $order->email,
-                'Your Digital Order Files - AstrologybyMari',
-                $html,
-                $order->user->name ?? 'Guest',
-                $attachmentPaths
-            );
-
-            $order->order_status = "Completed";
-            $order->save();
+                report($e);
+            }
         }
 
         return view('success', ['session' => $session]);
@@ -309,11 +358,22 @@ class PaymentController extends Controller
         $session = null;
 
         if ($request->session_id) {
-            $session = Session::retrieve($request->session_id);
+            try {
+                $session = Session::retrieve($request->session_id);
+            } catch (\Throwable $e) {
+                Log::channel('stripe')->error('Failed to retrieve Stripe session on cancel page', [
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'session_id' => $request->session_id,
+                ]);
+            }
         }
 
-        Log::info("Cancel page loaded", [
-            'session_id' => $request->session_id ?? null
+        Log::channel('stripe')->warning("Cancel page loaded", [
+            'session_id' => $request->session_id ?? null,
+            'order_id' => $session
+                ? optional(Order::where('stripe_session_id', $session->id)->first())->id
+                : null,
         ]);
 
         // Do NOT update order here — webhook handles failures correctly
@@ -330,13 +390,55 @@ class PaymentController extends Controller
         $sig_header = $request->header('Stripe-Signature');
         $endpoint_secret = $this->endpoint_secret;
 
+        if (empty($sig_header)) {
+            Log::channel('stripe')->error('Stripe webhook received without a Stripe-Signature header', [
+                'ip' => $request->ip(),
+            ]);
+        }
+
         try {
             $event = Webhook::constructEvent(
                 $payload,
                 $sig_header,
                 $endpoint_secret
             );
+        } catch (UnexpectedValueException $e) {
+            // Invalid payload
+            Log::channel('stripe')->error('Stripe webhook received invalid payload', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+            ]);
 
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (SignatureVerificationException $e) {
+            // Invalid signature — usually a wrong/stale endpoint_secret
+            Log::channel('stripe')->error('Stripe webhook signature verification failed', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'endpoint_secret_set' => !empty($endpoint_secret),
+            ]);
+
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
+            Log::channel('stripe')->error('Unexpected error while parsing Stripe webhook', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            report($e);
+
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+
+        Log::channel('stripe')->info('Stripe webhook event received', [
+            'event_id' => $event->id,
+            'event_type' => $event->type,
+        ]);
+
+        try {
             // Handle the event
             switch ($event->type) {
 
@@ -349,6 +451,15 @@ class PaymentController extends Controller
                         $order->status = 'Paid';
                         $order->order_status = 'Processing';
                         $order->save();
+
+                        Log::channel('stripe')->info('Order marked Paid via checkout.session.completed', [
+                            'order_id' => $order->id,
+                            'session_id' => $session->id,
+                        ]);
+                    } else {
+                        Log::channel('stripe')->error('checkout.session.completed received but no matching order found', [
+                            'session_id' => $session->id,
+                        ]);
                     }
 
                     break;
@@ -362,6 +473,15 @@ class PaymentController extends Controller
                         $order->status = 'Paid';
                         $order->order_status = 'Processing';
                         $order->save();
+
+                        Log::channel('stripe')->info('Order marked Paid via checkout.session.async_payment_succeeded', [
+                            'order_id' => $order->id,
+                            'session_id' => $session->id,
+                        ]);
+                    } elseif (!$order) {
+                        Log::channel('stripe')->error('checkout.session.async_payment_succeeded received but no matching order found', [
+                            'session_id' => $session->id,
+                        ]);
                     }
                     break;
 
@@ -374,6 +494,16 @@ class PaymentController extends Controller
                         $order->status = 'Failed';
                         $order->order_status = 'Payment Failed';
                         $order->save();
+
+                        Log::channel('stripe')->warning('Order marked Failed via checkout.session.async_payment_failed', [
+                            'order_id' => $order->id,
+                            'session_id' => $session->id,
+                            'reason' => $session->payment_intent ?? null,
+                        ]);
+                    } else {
+                        Log::channel('stripe')->error('checkout.session.async_payment_failed received but no matching order found', [
+                            'session_id' => $session->id,
+                        ]);
                     }
                     break;
 
@@ -386,12 +516,49 @@ class PaymentController extends Controller
                         $order->status = 'Expired';
                         $order->order_status = 'Cancelled';
                         $order->save();
+
+                        Log::channel('stripe')->warning('Order marked Expired via checkout.session.expired', [
+                            'order_id' => $order->id,
+                            'session_id' => $session->id,
+                        ]);
+                    } elseif (!$order) {
+                        Log::channel('stripe')->error('checkout.session.expired received but no matching order found', [
+                            'session_id' => $session->id,
+                        ]);
                     }
                     break;
+
+                case 'payment_intent.payment_failed':
+                    $intent = $event->data->object;
+
+                    Log::channel('stripe')->warning('payment_intent.payment_failed received', [
+                        'payment_intent_id' => $intent->id,
+                        'last_payment_error' => $intent->last_payment_error->message ?? null,
+                        'metadata' => $intent->metadata ?? null,
+                    ]);
+                    break;
+
+                default:
+                    Log::channel('stripe')->info('Unhandled Stripe webhook event type', [
+                        'event_type' => $event->type,
+                        'event_id' => $event->id,
+                    ]);
             }
 
             return response()->json(['status' => 'success']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            Log::channel('stripe')->error('Error while processing Stripe webhook event', [
+                'event_type' => $event->type ?? null,
+                'event_id' => $event->id ?? null,
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            report($e);
+
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
