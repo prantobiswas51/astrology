@@ -7,7 +7,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <h1 class="text-2xl font-bold text-white mb-1">Email Sent!</h1>
+                <h1 class="text-2xl font-bold text-white mb-1">Email Sent!!</h1>
                 <p class="text-indigo-100 text-sm">Please check your inbox</p>
             </div>
 
