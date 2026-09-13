@@ -66,6 +66,17 @@ task('deploy:npm', function () {
     writeln('Skipping npm install on server (assets built locally)');
 });
 
+// Skip composer scripts on the server — proc_open is disabled on this
+// cPanel host, and Composer needs it to run `post-autoload-dump` scripts
+// (artisan package:discover / filament:upgrade). Run those manually below
+// via plain SSH commands instead, which don't need proc_open.
+set('composer_options', get('composer_options').' --no-scripts');
+
+task('artisan:post-install', function () {
+    run('cd {{release_path}} && {{bin/php}} artisan package:discover --ansi');
+    run('cd {{release_path}} && {{bin/php}} artisan filament:upgrade');
+})->desc('Run composer post-autoload-dump artisan commands manually');
+
 // Hooks
 
 // Build assets locally before deployment starts
@@ -73,5 +84,8 @@ before('deploy', 'build:assets');
 
 // Upload assets after the release is prepared but before going live
 after('deploy:vendors', 'upload:assets');
+
+// Run the artisan commands composer's --no-scripts skipped
+after('deploy:vendors', 'artisan:post-install');
 
 after('deploy:failed', 'deploy:unlock');
