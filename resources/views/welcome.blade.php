@@ -14,7 +14,6 @@
             <img src="{{ asset('images/mari_profile.png') }}"
                 class="w-40 rounded-full mx-auto bg-gray-300 mt-6 relative z-20">
             <div class="des bg-white p-4 m-4 mt-[-30px] drop-shadow shadow-lg rounded-xl relative z-10">
-
                 <h1 class="text-3xl font-bold text-center mt-4">Mari Astrology</h1>
                 <h2 class="text-center  text-xl mt-2">Astrologer reader! At your service</h2>
                 <div class="text-center italic font-mono font-semibold text-lg">*whispers* I am not a psychic lol</div>
@@ -365,6 +364,96 @@
                     </div>
 
                     <a href="{{ route('product_view', ['slug' => 'personal-astrology-therapy']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+                {{-- Dominant Location and Surrounding readings --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">1 Dominant Location + Surrounding Areas</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                One location + surrounding areas! Pick Love, Money, or Personal Growth and I’ll help you
+                                narrow down where your chart works best.
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$35</del> <span class="text-gray-800">$30</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'one-dominant-location-surrounding']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+                {{-- ---------------------------------------------- --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">2 Dominant Location + Surrounding Areas</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Two locations + surrounding areas! Pick one goal and I’ll compare both areas to show you
+                                which location supports you more.
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$70</del> <span class="text-gray-800">$60</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'two-dominant-location-surrounding']) }}">
+                        <button
+                            class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
+                            Get Your Reading Now
+                        </button>
+                    </a>
+
+                </div>
+
+                {{-- ---------------------------------------------- --}}
+                <div
+                    class="reading_item bg-white border border-black rounded-lg shadow-lg p-4 flex flex-col hover:scale-105 transition-transform">
+
+                    <div class="flex">
+                        <img src="{{ asset('images/ph_product.png') }}" alt="Product Image"
+                            class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">3 Dominant Location + Surrounding Areas</h3>
+                            <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
+                                Three locations + surrounding areas! Pick one goal and I’ll compare and rank your
+                                strongest places for Love, Money, or Personal Growth.
+                            </p>
+
+                            <h2 class="font-bold text-lg text-sky-800/70">
+                                <del>$120</del> <span class="text-gray-800">$90</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('product_view', ['slug' => 'three-dominant-location-surrounding']) }}">
                         <button
                             class="mt-4 bg-gray-900 font-extrabold py-2 px-4 rounded-lg text-yellow-300 hover:bg-gray-800 transition-colors w-full">
                             Get Your Reading Now
