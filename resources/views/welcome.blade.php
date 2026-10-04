@@ -381,7 +381,7 @@
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
-                            <h3 class="text-xl font-semibold mb-1">1 Dominant Location + Surrounding Areas</h3>
+                            <h3 class="text-xl font-semibold mb-1">Astrocartography 1 Dominant Location + Surrounding Areas</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
                                 One location + surrounding areas! Pick Love, Money, or Personal Growth and I’ll help you
                                 narrow down where your chart works best.
@@ -411,7 +411,7 @@
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
-                            <h3 class="text-xl font-semibold mb-1">2 Dominant Location + Surrounding Areas</h3>
+                            <h3 class="text-xl font-semibold mb-1">Astrocartography 2 Dominant Location + Surrounding Areas</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
                                 Two locations + surrounding areas! Pick one goal and I’ll compare both areas to show you
                                 which location supports you more.
@@ -441,7 +441,7 @@
                             class="min-w-32 min-h-32 max-w-32 max-h-32 mr-3 object-cover bg-gray-200 rounded-lg">
 
                         <div>
-                            <h3 class="text-xl font-semibold mb-1">3 Dominant Location + Surrounding Areas</h3>
+                            <h3 class="text-xl font-semibold mb-1">Astrocartography 3 Dominant Location + Surrounding Areas</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
                                 Three locations + surrounding areas! Pick one goal and I’ll compare and rank your
                                 strongest places for Love, Money, or Personal Growth.
