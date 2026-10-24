@@ -384,7 +384,7 @@
                             <h3 class="text-xl font-semibold mb-1">Astrocartography 1 Dominant Location + Surrounding Areas</h3>
                             <p class="text-sky-600 drop-shadow text-sm font-semibold mb-2">
                                 One location + surrounding areas! Pick Love, Money, or Personal Growth and I’ll help you
-                                narrow down where your chart works best.
+                                narrow down where your chart works best..
                             </p>
 
                             <h2 class="font-bold text-lg text-sky-800/70">
