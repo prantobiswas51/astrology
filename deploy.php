@@ -4,88 +4,98 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 
-// Config
-set('writable_mode', 'chmod');
+/*
+|--------------------------------------------------------------------------
+| Basic Config
+|--------------------------------------------------------------------------
+*/
+
 set('repository', 'https://github.com/prantobiswas51/astrology.git');
-set('keep_releases', 1);
+set('branch', getenv('DEPLOY_BRANCH') ?: 'main');
 
+// Keep one previous release around so `dep rollback` has something to go back to.
+set('keep_releases', 3);
 
-// Load environment variables
+set('writable_mode', 'chmod');
+
+set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader');
+
+/*
+|--------------------------------------------------------------------------
+| Load Environment Variables
+|--------------------------------------------------------------------------
+*/
+
 $hostname = getenv('DEPLOY_HOSTNAME');
 $remoteUser = getenv('DEPLOY_REMOTE_USER');
 $deployPath = getenv('DEPLOY_PATH');
-$sshPort = getenv('DEPLOY_SSH_PORT');
-$branch = getenv('DEPLOY_BRANCH') ?: 'main';
+$sshPort = getenv('DEPLOY_SSH_PORT') ?: 22;
 
-// Validate required environment variables
 if (! $hostname) {
     throw new \RuntimeException('DEPLOY_HOSTNAME environment variable is required');
 }
+
 if (! $remoteUser) {
     throw new \RuntimeException('DEPLOY_REMOTE_USER environment variable is required');
 }
+
 if (! $deployPath) {
     throw new \RuntimeException('DEPLOY_PATH environment variable is required');
 }
 
-if (! $sshPort) {
-    throw new \RuntimeException('DEPLOY_SSH_PORT environment variable is required');
-}
+/*
+|--------------------------------------------------------------------------
+| Hosts
+|--------------------------------------------------------------------------
+*/
 
-// Hosts
-
+// The domain's cPanel document root is a symlink to {{deploy_path}}/current/public,
+// so each release goes live the moment `current` is switched.
 host($hostname)
     ->set('remote_user', $remoteUser)
     ->set('deploy_path', $deployPath)
-    ->set('http_user', 'www-data')
-    ->set('port', $sshPort)
-    ->set('branch', $branch);
+    ->set('port', (int) $sshPort);
 
-// Tasks
+/*
+|--------------------------------------------------------------------------
+| Local Asset Build
+|--------------------------------------------------------------------------
+*/
 
-// Build assets locally
+// The server has no Node, so assets are built on the runner and uploaded.
 task('build:assets', function () {
-    writeln('Building assets locally...');
+    writeln('📦 Building assets locally...');
     runLocally('npm ci');
     runLocally('npm run build');
 })->desc('Build assets locally');
 
-// Upload built assets
 task('upload:assets', function () {
-    writeln('Uploading built assets...');
+    writeln('🚀 Uploading built assets...');
     $user = get('remote_user');
     $hostname = currentHost()->getHostname();
     $port = get('port');
     $releasePath = get('release_path');
+    $archive = 'build-assets.tar.gz';
 
-    runLocally("scp -r -P {$port} public/build {$user}@{$hostname}:{$releasePath}/public/");
-})->desc('Upload built assets to server');
+    runLocally("tar -czf {$archive} -C public build");
+    runLocally("scp -P {$port} {$archive} {$user}@{$hostname}:{$releasePath}/");
+    run("tar -xzf {$releasePath}/{$archive} -C {$releasePath}/public/");
+    runLocally("rm {$archive}");
+    run("rm {$releasePath}/{$archive}");
+})->desc('Upload built assets');
 
-// Skip npm tasks on server by overriding them
 task('deploy:npm', function () {
-    writeln('Skipping npm install on server (assets built locally)');
+    writeln('⏭️  Skipping npm install on server');
 });
 
-// Skip composer scripts on the server — proc_open is disabled on this
-// cPanel host, and Composer needs it to run `post-autoload-dump` scripts
-// (artisan package:discover / filament:upgrade). Run those manually below
-// via plain SSH commands instead, which don't need proc_open.
-set('composer_options', get('composer_options').' --no-scripts');
+/*
+|--------------------------------------------------------------------------
+| Hooks
+|--------------------------------------------------------------------------
+*/
 
-task('artisan:post-install', function () {
-    run('cd {{release_path}} && {{bin/php}} artisan package:discover --ansi');
-    run('cd {{release_path}} && {{bin/php}} artisan filament:upgrade');
-})->desc('Run composer post-autoload-dump artisan commands manually');
-
-// Hooks
-
-// Build assets locally before deployment starts
 before('deploy', 'build:assets');
 
-// Upload assets after the release is prepared but before going live
 after('deploy:vendors', 'upload:assets');
-
-// Run the artisan commands composer's --no-scripts skipped
-after('deploy:vendors', 'artisan:post-install');
 
 after('deploy:failed', 'deploy:unlock');

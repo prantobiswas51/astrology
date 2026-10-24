@@ -3,8 +3,12 @@ name: Deploy to Production
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 concurrency: production_environment
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -14,23 +18,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, mbstring, pdo
+          tools: composer:v2
+          coverage: none
 
-      - name: Cache Composer packages
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-
+      # Tailwind scans vendor/ for pagination views, so vendor must exist before the build.
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest --no-dev --optimize-autoloader
+        run: composer install --prefer-dist --no-progress --no-interaction --no-dev --no-scripts
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -38,21 +38,16 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: Install npm dependencies
-        run: npm ci
-
-      - name: Build assets
-        run: npm run build
-
+      # deploy.php runs `npm ci && npm run build` and uploads public/build.
+      # Pin the revision so the server code matches the assets built here.
       - name: Deploy to Production
         uses: deployphp/action@v1
         with:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          dep: deploy
+          dep: deploy --revision=${{ github.sha }}
         env:
           DEPLOY_HOSTNAME: ${{ vars.DEPLOY_HOSTNAME }}
           DEPLOY_REMOTE_USER: ${{ vars.DEPLOY_REMOTE_USER }}
           DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
-          DEPLOY_HTTP_USER: ${{ vars.DEPLOY_HTTP_USER }}
-          DEPLOY_SSH_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+          DEPLOY_SSH_PORT: ${{ vars.DEPLOY_SSH_PORT }}
           DEPLOY_BRANCH: main
