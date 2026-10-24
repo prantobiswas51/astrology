@@ -49,7 +49,7 @@ if (! $deployPath) {
 |--------------------------------------------------------------------------
 */
 
-// The domain's cPanel document root is a symlink to {{deploy_path}}/current/public,
+// The domain's cPanel document root is {{deploy_path}}/current/public,
 // so each release goes live the moment `current` is switched.
 host($hostname)
     ->set('remote_user', $remoteUser)
