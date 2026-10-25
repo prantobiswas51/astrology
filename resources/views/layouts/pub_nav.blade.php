@@ -1,4 +1,4 @@
-<nav class="border-b bg-white border-gray-200 fixed w-full z-50 top-0 mb-16" style="z-index: 9999;">
+<nav class="border-b bg-white/90 backdrop-blur border-purple-200 shadow-sm fixed w-full z-50 top-0 mb-16" style="z-index: 9999;">
 
     <style>
         /* Hide navigation links on small screens */
@@ -53,9 +53,9 @@
 
                 <!-- Nav Links -->
                 <div class="p-2 nav-link flex items-center space-x-4">
-                    <a class="p-2" href="{{ route('home') }}">Home</a>
-                    <a class="p-2" href="{{ route('shop') }}">Shop</a>
-                    <a class="p-2" href="{{ route('contact') }}">Contact</a>
+                    <a class="p-2 font-medium text-gray-700 hover:text-purple-700 transition-colors" href="{{ route('home') }}">Home</a>
+                    <a class="p-2 font-medium text-gray-700 hover:text-purple-700 transition-colors" href="{{ route('shop') }}">Shop</a>
+                    <a class="p-2 font-medium text-gray-700 hover:text-purple-700 transition-colors" href="{{ route('contact') }}">Contact</a>
                 </div>
 
                 <!-- Dashboard (desktop only) -->
@@ -82,7 +82,7 @@
                     
                     <a href="{{ route('login') }}" class="text-black font-medium">Sign In</a>
                     <a href="{{ route('register') }}"
-                        class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800">Register</a>
+                        class="bg-gradient-to-r from-indigo-700 to-purple-600 text-white px-6 py-2 rounded-full font-medium shadow hover:from-indigo-800 hover:to-purple-700 transition">Register</a>
                     @endauth
                 </div>
             </div>

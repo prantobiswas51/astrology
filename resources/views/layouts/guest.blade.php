@@ -16,7 +16,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="text-gray-900 bg-gradient-to-tr from-sky-900 to-sky-400 bg-no-repeat bg-cover min-h-screen font-sans">
+<body class="text-gray-900 bg-gradient-to-br from-indigo-100 via-purple-100 to-amber-100 bg-fixed min-h-screen flex flex-col font-sans antialiased">
 
     @if (session('status'))
     <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
@@ -50,9 +50,9 @@
     {{-- client design --}}
     @include('layouts.pub_nav')
 
-    <div class="max-w-7xl mx-auto pt-20">
+    <main class="flex-1 w-full max-w-7xl mx-auto pt-20">
         {{ $slot }}
-    </div>
+    </main>
 
     @include('layouts.footer')
 </body>

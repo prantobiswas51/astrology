@@ -4,148 +4,183 @@
         .error-border {
             border: 2px solid red !important;
         }
+        .pdp-input {
+            width: 100%;
+            border: 1px solid #d8b4fe;
+            border-radius: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            background: #fff;
+            transition: box-shadow .15s, border-color .15s;
+        }
+        .pdp-input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, .2);
+        }
+        .thumb.active { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124, 58, 237, .35); }
     </style>
 
-    </style>
-    <div class="max-w-7xl bg-gray-200 min-h-screen mx-auto px-4 py-10">
+    @php
+    $isOnSale = $product->sale_price !== null && (float) $product->sale_price < (float) $product->price;
+    $finalPrice = $isOnSale ? $product->sale_price : $product->price;
+    $mainImg = $product->image1_path ? asset('storage/' . $product->image1_path) : asset('images/no_img.png');
+    $gallery = collect(['image1_path', 'image2_path', 'image3_path', 'image4_path'])
+        ->filter(fn ($k) => $product->$k)
+        ->map(fn ($k) => asset('storage/' . $product->$k));
+    $fields = collect($product->fields)->sortBy('order');
+    @endphp
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
 
         <!-- BUY NOW PAYMENT POPUP -->
-        <div id="paymentModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-
-            <div class="bg-white w-96 rounded-lg shadow-lg p-6">
+        <div id="paymentModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50">
+            <div class="bg-white w-96 max-w-[90vw] rounded-2xl shadow-2xl p-6">
                 <h2 class="text-xl font-semibold mb-4">Processing Payment</h2>
-
-                <p class="text-gray-700 mb-4">
-                    Please wait… preparing secure payment.
-                </p>
-
-                <div id="paymentStatus" class="text-center py-2 text-blue-600 font-medium">
-                    Loading Stripe…
-                </div>
-
+                <p class="text-gray-700 mb-4">Please wait&hellip; preparing secure payment.</p>
+                <div id="paymentStatus" class="text-center py-2 text-purple-700 font-medium">Loading Stripe&hellip;</div>
                 <button onclick="closePaymentModal()"
-                    class="mt-4 w-full bg-gray-700 text-white py-2 rounded hover:bg-gray-800">
+                    class="mt-4 w-full bg-gray-700 text-white py-2 rounded-xl hover:bg-gray-800">
                     Cancel
                 </button>
             </div>
         </div>
 
         {{-- Breadcrumbs --}}
-        <div class="breadcrumbs mb-2 text-sm">
-            <a href="{{ route('home') }}" class="hover:underline">Home</a> &gt;
-            <a href="{{ route('home', $product->category->id) }}" class=" hover:underline">
-                {{ $product->category->name }}</a> &gt;
-            <span class="text-gray-500">{{ $product->name }}</span>
-        </div>
+        <nav class="mb-5 text-sm text-gray-500 flex flex-wrap items-center gap-2">
+            <a href="{{ route('home') }}" class="hover:text-purple-700">Home</a>
+            <span>/</span>
+            <a href="{{ route('shop') }}" class="hover:text-purple-700">Shop</a>
+            @if ($product->category)
+            <span>/</span>
+            <span>{{ $product->category->name }}</span>
+            @endif
+            <span>/</span>
+            <span class="text-gray-800 font-medium">{{ $product->name }}</span>
+        </nav>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 bg-white/80 backdrop-blur rounded-3xl shadow-xl p-5 sm:p-8">
 
             <!-- IMAGE SECTION -->
-            <div>
-                <div class="w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
-                    <img id="mainImage" data-image="{{ asset('storage/' . $product->image1_path) }}"
-                        src="{{ asset('storage/' . $product->image1_path) }}"
-                        class="w-auto mx-auto h-full object-cover ">
+            <div class="md:sticky md:top-24 self-start">
+                <div class="relative w-full aspect-square bg-gradient-to-br from-indigo-50 to-purple-100 rounded-2xl overflow-hidden shadow-inner">
+                    <img id="mainImage" data-image="{{ $mainImg }}" src="{{ $mainImg }}"
+                        alt="{{ $product->name }}" class="w-full h-full object-contain">
+                    @if ($gallery->count() > 1)
+                    <button type="button" id="gallery-prev" aria-label="Previous image"
+                        class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow text-xl text-indigo-900 hover:bg-white">&#8249;</button>
+                    <button type="button" id="gallery-next" aria-label="Next image"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow text-xl text-indigo-900 hover:bg-white">&#8250;</button>
+                    <span id="gallery-count" class="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full"></span>
+                    @endif
+                    @if ($isOnSale)
+                    <span class="absolute top-3 left-3 bg-amber-400 text-indigo-950 text-xs font-bold px-3 py-1 rounded-full shadow">
+                        SAVE ${{ number_format($product->price - $product->sale_price, 2) }}
+                    </span>
+                    @endif
                 </div>
 
+                @if ($gallery->count() > 1)
                 <!-- Thumbnail Images -->
-                <div class="grid grid-cols-4 gap-4 mt-4">
-                    @foreach (['image1_path','image2_path','image3_path','image4_path'] as $img)
-                    @php $path = $product->$img ? asset('storage/' . $product->$img) : asset('images/no_img.png');
-                    @endphp
-                    <div class="bg-gray-100 h-24 border rounded-lg overflow-hidden cursor-pointer thumb"
+                <div class="flex gap-3 mt-4 overflow-x-auto pb-2 snap-x">
+                    @foreach ($gallery as $path)
+                    <div class="bg-gray-100 w-20 h-20 shrink-0 snap-start border-2 border-transparent rounded-xl overflow-hidden cursor-pointer thumb {{ $loop->first ? 'active' : '' }}"
                         data-image="{{ $path }}">
-                        <img src="{{ $path }}" class="w-full h-full object-cover">
+                        <img src="{{ $path }}" alt="" class="w-full h-full object-cover">
                     </div>
                     @endforeach
                 </div>
+                @endif
             </div>
 
             <!-- PRODUCT INFO -->
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">{{ $product->name }}</h1>
+                @if ($product->category)
+                <span class="inline-block text-xs font-semibold tracking-wide uppercase text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
+                    {{ $product->category->name }}
+                </span>
+                @endif
 
-                <div class="mt-4 flex items-center gap-4">
-                    <p class="text-4xl font-semibold text-blue-600">${{ $product->sale_price }}</p>
-                    <p class="text-gray-400 line-through">${{ $product->price }}</p>
+                <h1 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">{{ $product->name }}</h1>
+
+                <div class="mt-4 flex items-baseline gap-3">
+                    <p class="text-4xl font-extrabold text-indigo-800">${{ number_format($finalPrice, 2) }}</p>
+                    @if ($isOnSale)
+                    <p class="text-lg text-gray-400 line-through">${{ number_format($product->price, 2) }}</p>
+                    @endif
                 </div>
 
-                <p class="mt-6 text-gray-700 leading-relaxed"> {{ $product->short_description }} </p>
-                <p class="mt-6 text-gray-700 leading-relaxed"> {!! $product->custom_html !!} </p>
+                @if ($product->short_description)
+                <p class="mt-5 text-gray-700 leading-relaxed">{{ $product->short_description }}</p>
+                @endif
+                @if ($product->custom_html)
+                <div class="mt-4 text-gray-700 leading-relaxed">{!! $product->custom_html !!}</div>
+                @endif
+
+                <hr class="my-6 border-purple-100">
 
                 <!-- Quantity -->
-                <div class="mt-6">
+                <div>
                     <label class="block text-gray-700 font-medium mb-2">Quantity</label>
-                    <div class="flex items-center border rounded-lg w-32">
+                    <div class="flex items-center border border-purple-300 rounded-xl w-36 overflow-hidden bg-white">
                         <button type="button" id="qty-decrease"
-                            class="px-3 py-2 text-lg font-bold text-gray-700 hover:bg-gray-200">-</button>
+                            class="px-3 py-2 text-lg font-bold text-gray-700 hover:bg-purple-50">-</button>
                         <input type="number" id="qty_input" min="1" value="1"
-                            class="w-full text-center px-2 py-2 border-gray-100/40">
+                            class="w-full text-center px-2 py-2 border-0 focus:ring-0">
                         <button type="button" id="qty-increase"
-                            class="px-3 py-2 text-lg font-bold text-gray-700 hover:bg-gray-200">+</button>
+                            class="px-3 py-2 text-lg font-bold text-gray-700 hover:bg-purple-50">+</button>
                     </div>
                 </div>
 
-
-                @php
-                $fields = collect($product->fields)->sortBy('order');
-                @endphp
-
                 <!-- Dynamic Custom Fields -->
-                <div class="custom-fields">
+                <div class="custom-fields mt-5">
 
-                    <label class="block mb-1 mt-6">Email</label>
+                    <label class="block mb-1 font-medium text-gray-700">Email</label>
                     <input type="email" name="email" id="email" placeholder="yourmail@domain.com" required
-                        class="border rounded-lg w-full p-2 mb-3 border-gray-300">
-
+                        class="pdp-input mb-4">
 
                     @foreach($fields as $field)
-                    <div class="mb-3">
-                        <label class="block mb-1">{{ $field['label'] }}</label>
+                    <div class="mb-4">
+                        <label class="block mb-1 font-medium text-gray-700">{{ $field['label'] }}</label>
 
                         @if($field['type'] === 'text')
                         <input id="fields[{{ $field['id'] }}]" type="text" name="fields[{{ $field['name'] }}]"
                             @if($field['placeholder']) placeholder="{{ $field['placeholder'] }}" @endif
-                            class="border rounded-lg w-full p-2 mb-3 border-gray-300" @if($field['required']) required
-                            @endif>
+                            class="pdp-input" @if($field['required']) required @endif>
 
                         @elseif($field['type'] === 'number')
                         <input type="number" id="fields[{{ $field['id'] }}]" name="fields[{{ $field['name'] }}]"
                             @if($field['placeholder']) placeholder="{{ $field['placeholder'] }}" @endif
-                            class="border rounded-lg w-full p-2 mb-3 border-gray-300" @if($field['required']) required
-                            @endif>
+                            class="pdp-input" @if($field['required']) required @endif>
 
                         @elseif($field['type'] === 'textarea')
-                        <textarea id="fields[{{ $field['id'] }}]" name="fields[{{ $field['name'] }}]"
+                        <textarea id="fields[{{ $field['id'] }}]" name="fields[{{ $field['name'] }}]" rows="3"
                             @if($field['placeholder']) placeholder="{{ $field['placeholder'] }}" @endif
-                            class="border rounded-lg w-full p-2 mb-3 border-gray-300" @if($field['required']) required
-                            @endif></textarea>
+                            class="pdp-input" @if($field['required']) required @endif></textarea>
 
                         @elseif($field['type'] === 'date')
                         <input id="fields[{{ $field['id'] }}]" type="date" name="fields[{{ $field['name'] }}]"
                             @if($field['placeholder']) placeholder="{{ $field['placeholder'] }}" @endif
-                            class="border rounded-lg w-full p-2 border-gray-300" @if($field['required']) required
-                            @endif>
+                            class="pdp-input" @if($field['required']) required @endif>
 
                         @elseif($field['type'] === 'select')
                         <select id="fields[{{ $field['id'] }}]" name="fields[{{ $field['name'] }}]"
                             @if($field['placeholder']) placeholder="{{ $field['placeholder'] }}" @endif
-                            class="border rounded-lg w-full p-2  border-gray-300" @if($field['required']) required
-                            @endif>
+                            class="pdp-input" @if($field['required']) required @endif>
                             @foreach($field['options'] as $option)
                             <option>{{ $option }}</option>
                             @endforeach
                         </select>
 
                         @elseif($field['type'] === 'radio')
-                        @foreach(explode(',', $field['options']) as $option)
-                        <label class="mr-3">
-                            <input type="radio" id="fields[{{ $field['id'] }}]" name="fields[{{ $field['name'] }}]"
-                                value="{{ trim($option) }}" @if($field['required']) required @endif>
-                            {{ trim($option) }}
-                        </label>
-                        @endforeach
-
+                        <div class="flex flex-wrap gap-x-4 gap-y-2">
+                            @foreach(explode(',', $field['options']) as $option)
+                            <label class="inline-flex items-center gap-2">
+                                <input type="radio" id="fields[{{ $field['id'] }}]" name="fields[{{ $field['name'] }}]"
+                                    value="{{ trim($option) }}" class="text-purple-600" @if($field['required']) required @endif>
+                                {{ trim($option) }}
+                            </label>
+                            @endforeach
+                        </div>
                         @endif
                     </div>
                     @endforeach
@@ -153,50 +188,57 @@
 
                 @if ($product->type == "digital")
                 <!-- Digital Product Note -->
-                <p class="my-4 text-sm text-gray-500">
-                    Note: This is a digital product. After purchase, you will receive a download link via email.
-                </p>
+                <div class="my-5 rounded-xl bg-indigo-50 border border-indigo-100 p-4">
+                    <p class="text-sm text-indigo-900">
+                        Note: This is a digital product. After purchase, you will receive a download link via email.
+                    </p>
 
-                {{-- {{ ($product_files) }} --}}
-
-                @foreach ($product_files as $file)
-                <input type="checkbox" class="rounded-md" name="files[]" id="file_{{ $file['id'] }}"> {{
-                $file['file_name'] }} <br>
-                @endforeach
-
+                    @foreach ($product_files as $file)
+                    <label class="mt-3 flex items-center gap-2 text-gray-800">
+                        <input type="checkbox" class="rounded text-purple-600" name="files[]" id="file_{{ $file['id'] }}">
+                        {{ $file['file_name'] }}
+                    </label>
+                    @endforeach
+                </div>
                 @endif
 
                 <!-- Action Buttons -->
-                <div class="flex gap-3 mt-4">
+                <div class="mt-6">
                     <button type="submit" name="action" value="buy"
-                        class="bg-blue-600 hover:scale-105 hover:transition-shadow text-white px-4 py-2 rounded">
-                        Buy Now
+                        class="w-full bg-gradient-to-r from-indigo-700 to-purple-600 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:from-indigo-800 hover:to-purple-700 active:scale-95 transition">
+                        Buy Now &middot; ${{ number_format($finalPrice, 2) }}
                     </button>
-
-                    {{-- <button type="submit" name="action" value="add"
-                        class="bg-gray-800 hover:scale-105 hover:transition-shadow text-white px-4 py-2 rounded">
-                        Add to Cart
-                    </button> --}}
+                    <p class="mt-3 text-center text-xs text-gray-500">&#128274; Secure checkout powered by Stripe</p>
                 </div>
-
-                <!-- Extra Details -->
-                {{-- <div class="mt-10">
-                    <h3 class="text-xl font-semibold mb-3">Product Description</h3>
-                    <p class="text-gray-700 leading-relaxed"> {{ $product->description }} </p>
-                </div> --}}
 
             </div>
         </div>
     </div>
 
     <script>
-        document.querySelectorAll('.thumb').forEach(t => {
-            t.addEventListener('click', function () {
-                let newImg = this.getAttribute('data-image');
-                document.getElementById('mainImage').src = newImg;
-            });
-        });
+        const thumbs = Array.from(document.querySelectorAll('.thumb'));
+        let galleryIndex = 0;
 
+        function showImage(i) {
+            if (!thumbs.length) return;
+            galleryIndex = (i + thumbs.length) % thumbs.length;
+            document.getElementById('mainImage').src = thumbs[galleryIndex].getAttribute('data-image');
+            thumbs.forEach(x => x.classList.remove('active'));
+            thumbs[galleryIndex].classList.add('active');
+            thumbs[galleryIndex].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+            const counter = document.getElementById('gallery-count');
+            if (counter) counter.textContent = (galleryIndex + 1) + ' / ' + thumbs.length;
+        }
+
+        thumbs.forEach((t, i) => t.addEventListener('click', () => showImage(i)));
+        document.getElementById('gallery-prev')?.addEventListener('click', () => showImage(galleryIndex - 1));
+        document.getElementById('gallery-next')?.addEventListener('click', () => showImage(galleryIndex + 1));
+        document.addEventListener('keydown', e => {
+            if (e.target.matches('input, textarea, select')) return;
+            if (e.key === 'ArrowLeft') showImage(galleryIndex - 1);
+            if (e.key === 'ArrowRight') showImage(galleryIndex + 1);
+        });
+        showImage(0);
         const qtyInput = document.getElementById('qty_input');
         const btnIncrease = document.getElementById('qty-increase');
         const btnDecrease = document.getElementById('qty-decrease');
